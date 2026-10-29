@@ -4,7 +4,7 @@ See [SKILL.md](SKILL.md) for the method.
 
 ## Credit
 
-Phase 3 rules 4, 6, 7, 8 and 9 use rules from Emil Kowalski's [emilkowalski/skills](https://github.com/emilkowalski/skills) and from his sites [emilkowal.ski](https://emilkowal.ski/) and [aiforui.dev](https://aiforui.dev/).
+Parts of the method use rules from Emil Kowalski's [emilkowalski/skills](https://github.com/emilkowalski/skills) and from his sites [emilkowal.ski](https://emilkowal.ski/) and [aiforui.dev](https://aiforui.dev/).
 The skill states these rules in its own words. It does not copy his files.
 His repository has this licence:
 

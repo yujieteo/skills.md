@@ -68,7 +68,7 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Motion follows the finger, and the user can interrupt and redirect it at any time.
    Each animation has a purpose: spatial consistency, a change of state, or feedback. Use the action frequency from Phase 1.
    Check:
-   - An action that users do many times a day, or start from the keyboard, has no animation.
+   - An action that users do many times a day, or start from the keyboard, has no animation. Press feedback (rule 4) is not part of this check.
    - Each other UI animation changes only `transform` and `opacity` and lasts 300 ms or less.
    - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in`.
    - No element starts from `scale(0)`. An element enters from `scale(0.9)` or more, with `opacity: 0`.

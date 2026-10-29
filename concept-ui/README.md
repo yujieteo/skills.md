@@ -6,7 +6,19 @@ See [SKILL.md](SKILL.md) for the method.
 
 Parts of the method use rules from Emil Kowalski's [emilkowalski/skills](https://github.com/emilkowalski/skills) and from his sites [emilkowal.ski](https://emilkowal.ski/) and [aiforui.dev](https://aiforui.dev/).
 The skill states these rules in its own words. It does not copy his files.
-His repository has this licence:
+His repositories [sonner](https://github.com/emilkowalski/sonner) and [vaul](https://github.com/emilkowalski/vaul) are MIT licensed, Copyright (c) 2023 Emil Kowalski. The skill copies no code from them.
+
+### Evidence
+
+- Rule 4, undo timer pause: `emilkowalski/sonner src/index.tsx` line 234, `src/hooks.tsx` lines 4–11.
+- Rule 6, durations of 500 ms or less and the sheet curve: `emilkowalski/vaul src/constants.ts`, `src/style.css` line 4, `emilkowalski/sonner src/styles.css` line 89.
+- Rule 6, dismiss thresholds: `emilkowalski/sonner src/index.tsx` lines 40 and 348, `emilkowalski/vaul src/constants.ts`.
+- Rule 6, damped drag: `emilkowalski/vaul src/helpers.ts` line 90, `emilkowalski/sonner src/index.tsx` line 387.
+- Rule 6, pointer capture: `emilkowalski/sonner src/index.tsx` line 321, `emilkowalski/vaul src/index.tsx` line 276.
+
+### Licence of emilkowalski/skills
+
+His skills repository has this licence:
 
 ```text
 MIT License

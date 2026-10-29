@@ -59,7 +59,7 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Check: each object kind has one z-layer in a single table in the code (tokens or constants). No object changes layer, except during a lift or drag gesture.
 4. **Direct manipulation** (Shneiderman).
    Users act on the visible object: drag, swipe, tap, edit in place. Each action shows its result at once. Each action is reversible.
-   Check: no destructive action uses a confirm dialog. Each destructive action shows an undo control for at least 5 seconds, and the undo restores the previous state.
+   Check: no destructive action uses a confirm dialog. Each destructive action shows an undo control for at least 5 seconds, and the undo restores the previous state. The undo timer pauses while the page is hidden or while the user interacts with the undo control.
    Check: each pressable control changes on press (`:active` or `pointerdown`), not on release. It scales to 0.95–0.98 in 100–160 ms.
 5. **A visible signifier for each action** (Norman).
    An affordance is what the user can do. A signifier shows the user that they can do it.
@@ -68,13 +68,14 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Motion follows the finger, and the user can interrupt and redirect it at any time.
    Each animation has a purpose: spatial consistency, a change of state, or feedback. Use the action frequency from Phase 1.
    Check:
-   - An action that users do many times a day, or start from the keyboard, has no animation. Press feedback (rule 4) is not part of this check.
-   - Each other UI animation changes only `transform` and `opacity` and lasts 300 ms or less.
-   - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in`.
+   - An action that users do many times a day, or start from the keyboard, has no animation. Press feedback (rule 4), and motion that a gesture drives and its release, are not part of this check.
+   - Each other UI animation changes only `transform` and `opacity`. It lasts 300 ms or less. Toasts, sheets, drawers and modals last 500 ms or less.
+   - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in`. For sheets and drawers, an example curve is `cubic-bezier(0.32, 0.72, 0, 1)`.
    - No element starts from `scale(0)`. An element enters from `scale(0.9)` or more, with `opacity: 0`.
    - A popover scales from its trigger (`transform-origin`). A modal scales from the centre.
    - During an animation, a new touch stops the animation and gives control to the finger. State that can change during an animation uses a CSS transition or a spring, not keyframes.
-   - A released drag continues with the finger velocity. A flick faster than 0.11 px/ms dismisses, at any distance.
+   - A released drag continues with the finger velocity. It dismisses when it passes a distance threshold or a velocity threshold. Thus a fast flick dismisses at any distance. Examples: a toast at 45 px or 0.11 px/ms, a drawer at 25% of its height or 0.4 px/ms.
+   - A drag past an edge is damped, not stopped. During a drag, the element captures the pointer (`setPointerCapture`).
    - With `prefers-reduced-motion: reduce`, movement is replaced by a fade or no animation.
 7. **Mobile first**.
    Check at 375 px width:

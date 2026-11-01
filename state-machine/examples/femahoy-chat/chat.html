@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>femahoy chat: from request to mesh, solve and report</title>
+<style>
+:root { --bg: #fdfdfc; --chip: #f9f9f8; --line: #e9e9e7; --select: #e2e1de; --underline: #bcbbb5; --muted: #63635e; --ink: #21201c;
+  --hover: #f5f4f4; --card: #fff; --card-edge: rgba(0,0,0,.08); --shadow: 0 4px 12px rgba(0,0,0,.1);
+  --sans: "Inter", "Inter Fallback", Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --small: 0.875rem; --code: 0.8125rem; --radius: 6px; --press: 0.97; --press-duration: 150ms; --tap: 44px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --gray1: #fcfcfc; --gray2: #f8f8f8; --gray3: #f3f3f3; --gray4: #ededed; --gray7: #dbdbdb;
+  --fade-duration: 150ms; --bad: #b4321f; --bad-bg: #fbeeec; --good: #2f6b3a; --good-bg: #edf5ee;
+  --focus-ring: 0 0 0 1px rgba(0,0,0,.06), 0 1px 0 0 rgba(0,0,0,.08), 0 0 0 2px rgba(0,0,0,.15); }
+@font-face { font-family: "Inter Fallback"; src: local("Arial"); size-adjust: 107.12%; ascent-override: 90.44%; descent-override: 22.52%; line-gap-override: 0%; }
+* { box-sizing: border-box; outline-color: var(--muted); }
+::selection { background: var(--select); }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1rem/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 96px; }
+h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 4px; }
+h2 { font-size: 1.125rem; font-weight: 600; margin: 40px 0 12px; }
+h3 { font-size: 1rem; font-weight: 600; margin: 0 0 8px; }
+p, li { max-width: 70ch; }
+.muted { color: var(--muted); font-size: var(--small); }
+a { color: inherit; text-decoration: underline 0.08em var(--underline); text-underline-position: from-font; }
+@media (hover: hover) and (pointer: fine) { a:hover { text-decoration-color: #8d8d86; } }
+code, .mono { font-family: var(--mono); font-size: var(--code); }
+.verdict { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.verdict li { background: var(--chip); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: var(--small); }
+.verdict li[data-bad] { background: var(--bad-bg); border-color: #f0cfc9; color: var(--bad); }
+.finds { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 6px; }
+.finds li[data-bug] { border-color: #f0cfc9; }
+.finds li { background: var(--card); border: 1px solid var(--card-edge); border-radius: var(--radius); padding: 8px 12px; font-size: var(--small); max-width: none; }
+.finds b { font-family: var(--mono); font-weight: 500; margin-right: 8px; }
+.pair { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .pair[data-two] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.card { background: var(--card); border: 1px solid var(--card-edge); border-radius: 10px; padding: 16px; min-width: 0; }
+.graph { overflow-x: auto; margin: 0 -4px; }
+svg { display: block; font-family: var(--sans); width: 100%; height: auto; }
+.node rect { fill: var(--gray1); stroke: var(--gray7); }
+.node[data-final] rect { stroke-width: 3; stroke: var(--gray7); }
+.node[data-bad] rect { fill: var(--bad-bg); stroke: #e3a69c; }
+.node[data-current] rect { fill: var(--ink); stroke: var(--ink); }
+.node[data-current] text { fill: var(--bg); }
+.node text { font-size: 13px; fill: var(--ink); }
+.edge { fill: none; stroke: var(--underline); stroke-width: 1.25; }
+.edge[data-wild] { stroke-dasharray: 4 4; }
+.elabel { font-size: 11px; fill: var(--muted); paint-order: stroke; stroke: var(--card); stroke-width: 4px; stroke-linejoin: round; }
+.marker { fill: var(--ink); }
+.sim { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+.sim .now { font-size: var(--small); color: var(--muted); margin-right: 4px; }
+.trail { font-family: var(--mono); font-size: var(--code); color: var(--muted); margin-top: 8px; min-height: 1.5em; overflow-wrap: anywhere; }
+button { touch-action: manipulation; user-select: none; -webkit-user-select: none; position: relative; transition: transform var(--press-duration) var(--ease-out); }
+button:enabled:active { transform: scale(var(--press)); }
+button::after { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, var(--tap)); height: max(100%, var(--tap)); transform: translate(-50%, -50%); }
+.button { margin: 0; padding: 8px 12px; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--ink);
+  font: 500 0.8125rem/1.5 var(--sans); cursor: pointer; transition: transform var(--press-duration) var(--ease-out), background-color var(--fade-duration), border-color var(--fade-duration); }
+.button small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+.button[data-ignored] { color: var(--muted); }
+.button[data-primary] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .button:not([data-primary]):hover { background: var(--gray2); border-color: var(--gray4); } }
+.button:focus-visible { outline: 2px solid transparent; box-shadow: var(--focus-ring); }
+.rows { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--small); }
+th { text-align: left; font-weight: 500; color: var(--muted); border-bottom: 1px solid var(--line); padding: 6px 8px; white-space: nowrap; }
+td { border-bottom: 1px solid var(--line); padding: 6px 8px; vertical-align: top; }
+td.src { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); overflow-wrap: anywhere; min-width: 10ch; }
+tr[data-fired] td { background: var(--hover); }
+tr:target td { background: var(--select); }
+.tag { display: inline-block; font-size: 0.75rem; border-radius: 4px; padding: 0 6px; margin: 2px 4px 0 0; background: var(--bad-bg); color: var(--bad); white-space: nowrap; }
+.tag[data-kind=simplify] { background: var(--gray3); color: var(--muted); }
+.decide { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; min-width: 13rem; }
+.decide label { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; font-size: 0.8125rem; }
+.decide label:has(input[value=approve]:checked) { background: var(--good-bg); border-color: #b9d7be; color: var(--good); }
+.decide label:has(input[value=reject]:checked) { background: var(--bad-bg); border-color: #f0cfc9; color: var(--bad); }
+.decide input[type=radio] { margin: 0; accent-color: var(--ink); }
+.decide input[type=text] { flex: 1 1 8rem; min-width: 0; font: inherit; font-size: 0.8125rem; padding: 4px 8px; min-height: 32px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+tr[data-decision=reject] td:not(.dcell) { text-decoration: line-through; color: var(--muted); }
+.reqs td:first-child { font-family: var(--mono); white-space: nowrap; }
+.bar { position: sticky; bottom: 0; background: color-mix(in srgb, var(--bg) 92%, transparent); border-top: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; backdrop-filter: blur(8px); }
+.bar textarea { width: 100%; max-width: 720px; font-family: var(--mono); font-size: 0.75rem; }
+@media (prefers-reduced-motion: reduce) { :root { --press: 1; } }
+</style></head>
+<body><main id="app"></main>
+<form class="bar" id="bar" data-lavish-question="state-machine-review"><span class="muted" id="count">No decisions yet.</span><button class="button" data-primary type="submit">Queue the review</button><span class="muted" role="status" aria-live="polite" id="status"></span></form>
+<script>
+const DATA = {"title":"femahoy chat: from request to mesh, solve and report","file":"chat.sm.md","intro":["Source: femahoy at 321483d6, read only. `daemon/` is `crates/fh/src/daemon/`.","Machine `chat` is the agent process in the daemon (`Log` in `daemon/chat.rs`): its state is not a field, but `running()` over the flags `reading`, `turn`, `sent`, `taken` and `input`.","Machine `job` is what the page shows for one request (`entry()` in `daemon/page.html`). It is a parallel region of `chat`."],"reqs":[{"id":"R1","text":"A message during the work reaches the agent at its next step.","source":"DESIGN.md:36"},{"id":"R2","text":"`Stop agent and commands` ends the work at once.","source":"DESIGN.md:36"},{"id":"R3","text":"If no agent is alive, a message starts one first, and the new agent continues the session of the chat.","source":"daemon/chat.rs:238 and daemon/chat.rs:274"},{"id":"R4","text":"An `error` entry shows when the agent cannot start, or when it ended before the end of its work.","source":"daemon/chat.rs:36"},{"id":"R5","text":"A status shows the current action of the agent and the time.","source":"DESIGN.md:36"},{"id":"R6","text":"A missing or signed-out agent tells the person what to do.","source":"DESIGN.md:82"},{"id":"R7","text":"The agent writes a CAD script for the part, meshes it with gmsh, writes the solver input and solves it.","source":"README.md:42"},{"id":"R8","text":"It solves at least 2 meshes to find the mesh error.","source":"README.md:42"},{"id":"R9","text":"At the end, the agent writes 1 HTML report with the results, a hand check and the viewer.","source":"README.md:42"},{"id":"R10","text":"The page refuses an empty message.","source":"daemon/chat.rs:242"}],"bugs":[{"id":"B1","text":"After Stop, entries of the stopped agent still show. A late `end` entry hides the Rerun button (daemon/page.html:819). Row `* | stale_line`.","source":"tests/chat_stale_line.rs fails on 321483d6"}],"machines":[{"name":"chat","initial":"none","final":[],"states":["none","working","broken","resting"],"events":["ask","turn","result","exit","stop","empty","stale_line"],"rows":[{"line":31,"state":"none","event":"ask","guard":"spawn ok","next":"working","reqs":["R3"],"source":"daemon/chat.rs:247"},{"line":32,"state":"none","event":"ask","guard":"else","next":"none","reqs":["R4","R6"],"source":"daemon/chat.rs:292"},{"line":33,"state":"working","event":"ask","guard":"write ok","next":"working","reqs":["R1"],"source":"daemon/chat.rs:270"},{"line":34,"state":"working","event":"ask","guard":"else","next":"broken","reqs":[],"source":"daemon/chat.rs:264"},{"line":35,"state":"resting","event":"ask","guard":"write ok","next":"working","reqs":["R1","R5"],"source":"daemon/chat.rs:250"},{"line":36,"state":"resting","event":"ask","guard":"else","next":"broken","reqs":[],"source":"daemon/chat.rs:264"},{"line":37,"state":"broken","event":"ask","guard":"spawn ok","next":"working","reqs":["R3","R4"],"source":"daemon/chat.rs:278"},{"line":38,"state":"broken","event":"ask","guard":"else","next":"none","reqs":["R4"],"source":"daemon/chat.rs:292"},{"line":39,"state":"working","event":"turn","guard":"","next":"working","reqs":["R5"],"source":"daemon/chat.rs:377"},{"line":40,"state":"working","event":"result","guard":"sent > taken","next":"working","reqs":["R1"],"source":"daemon/chat.rs:383"},{"line":41,"state":"working","event":"result","guard":"else","next":"resting","reqs":["R5"],"source":"daemon/chat.rs:383"},{"line":42,"state":"working","event":"exit","guard":"","next":"none","reqs":["R4"],"source":"daemon/chat.rs:414"},{"line":43,"state":"broken","event":"exit","guard":"","next":"none","reqs":["R4"],"source":"daemon/chat.rs:414"},{"line":44,"state":"resting","event":"exit","guard":"","next":"none","reqs":["R3"],"source":"daemon/chat.rs:417"},{"line":45,"state":"none","event":"exit","guard":"","next":"-","reqs":["R2"],"source":"daemon/chat.rs:397"},{"line":46,"state":"*","event":"stop","guard":"","next":"none","reqs":["R2"],"source":"daemon/chat.rs:328"},{"line":47,"state":"*","event":"empty","guard":"","next":"-","reqs":["R10"],"source":"daemon/chat.rs:242"},{"line":48,"state":"*","event":"turn","guard":"","next":"-","reqs":["R5"],"source":"daemon/chat.rs:376"},{"line":49,"state":"*","event":"result","guard":"","next":"-","reqs":["R5"],"source":"daemon/chat.rs:376"},{"line":50,"state":"*","event":"stale_line","guard":"","next":"-","reqs":[],"source":"daemon/chat.rs:386"}],"simplify":[{"kind":"global-event","machine":"chat","at":"exit","line":42,"detail":"3 rows (working broken resting) -> none: write one * row"}]},{"name":"job","initial":"idle","final":[],"states":["idle","asked","meshed","solved","reported"],"events":["you","show","open","report","end","error","stopped"],"rows":[{"line":83,"state":"idle","event":"you","guard":"","next":"asked","reqs":["R1"],"source":"daemon/page.html:851"},{"line":84,"state":"asked","event":"show","guard":"","next":"meshed","reqs":["R7"],"source":"daemon/page.html:802"},{"line":85,"state":"asked","event":"open","guard":"","next":"solved","reqs":["R7"],"source":"daemon/page.html:782"},{"line":86,"state":"meshed","event":"show","guard":"","next":"meshed","reqs":["R7"],"source":"daemon/page.html:802"},{"line":87,"state":"meshed","event":"open","guard":"","next":"solved","reqs":["R7"],"source":"daemon/page.html:782"},{"line":88,"state":"solved","event":"open","guard":"","next":"solved","reqs":["R8"],"source":"daemon/page.html:782"},{"line":89,"state":"solved","event":"report","guard":"","next":"reported","reqs":["R9"],"source":"daemon/page.html:795"},{"line":90,"state":"reported","event":"end","guard":"","next":"idle","reqs":["R9"],"source":"daemon/page.html:818"},{"line":91,"state":"solved","event":"end","guard":"","next":"idle","reqs":[],"source":"daemon/page.html:818"},{"line":92,"state":"asked","event":"end","guard":"","next":"idle","reqs":[],"source":"daemon/page.html:818"},{"line":93,"state":"meshed","event":"end","guard":"","next":"idle","reqs":[],"source":"daemon/page.html:818"},{"line":94,"state":"*","event":"error","guard":"","next":"idle","reqs":["R4"],"source":"daemon/page.html:777"},{"line":95,"state":"*","event":"stopped","guard":"","next":"idle","reqs":["R2"],"source":"daemon/page.html:823"},{"line":96,"state":"*","event":"you","guard":"","next":"-","reqs":["R1"],"source":"DESIGN.md:36"},{"line":97,"state":"*","event":"show","guard":"","next":"-","reqs":["R7"],"source":"daemon/chat.rs:336"},{"line":98,"state":"*","event":"open","guard":"","next":"-","reqs":["R7"],"source":"daemon/chat.rs:336"},{"line":99,"state":"*","event":"report","guard":"","next":"-","reqs":["R9"],"source":"daemon/chat.rs:336"},{"line":100,"state":"*","event":"end","guard":"","next":"-","reqs":["R5"],"source":"daemon/page.html:818"}],"simplify":[{"kind":"merge-states","machine":"job","at":"asked+meshed","line":0,"detail":"same rows to the same states"},{"kind":"pass-through","machine":"job","at":"reported","line":90,"detail":"solved -> reported -> idle: delete reported"},{"kind":"global-event","machine":"job","at":"open","line":85,"detail":"3 rows (asked meshed solved) -> solved: write one * row"},{"kind":"global-event","machine":"job","at":"end","line":90,"detail":"4 rows (reported solved asked meshed) -> idle: write one * row"}]}],"proposals":[{"name":"chat","initial":"none","final":[],"states":["none","working","resting"],"events":["ask","turn","result","exit","stop","empty","stale_line"],"rows":[{"line":59,"state":"none","event":"ask","guard":"spawn ok","next":"working","reqs":["R3"],"source":"daemon/chat.rs:247"},{"line":60,"state":"none","event":"ask","guard":"else","next":"none","reqs":["R4","R6"],"source":"daemon/chat.rs:292"},{"line":61,"state":"working","event":"ask","guard":"write ok","next":"working","reqs":["R1"],"source":"daemon/chat.rs:270"},{"line":62,"state":"resting","event":"ask","guard":"write ok","next":"working","reqs":["R1","R5"],"source":"daemon/chat.rs:250"},{"line":63,"state":"*","event":"ask","guard":"else","next":"none","reqs":["R4"],"source":"proposal: a write failure ends the agent"},{"line":64,"state":"working","event":"turn","guard":"","next":"working","reqs":["R5"],"source":"daemon/chat.rs:377"},{"line":65,"state":"working","event":"result","guard":"sent > taken","next":"working","reqs":["R1"],"source":"daemon/chat.rs:383"},{"line":66,"state":"working","event":"result","guard":"else","next":"resting","reqs":["R5"],"source":"daemon/chat.rs:383"},{"line":67,"state":"working","event":"exit","guard":"","next":"none","reqs":["R4"],"source":"daemon/chat.rs:414"},{"line":68,"state":"resting","event":"exit","guard":"","next":"none","reqs":["R3"],"source":"daemon/chat.rs:417"},{"line":69,"state":"none","event":"exit","guard":"","next":"-","reqs":["R2"],"source":"daemon/chat.rs:397"},{"line":70,"state":"*","event":"stop","guard":"","next":"none","reqs":["R2"],"source":"daemon/chat.rs:328"},{"line":71,"state":"*","event":"empty","guard":"","next":"-","reqs":["R10"],"source":"daemon/chat.rs:242"},{"line":72,"state":"*","event":"turn","guard":"","next":"-","reqs":["R5"],"source":"daemon/chat.rs:376"},{"line":73,"state":"*","event":"result","guard":"","next":"-","reqs":["R5"],"source":"daemon/chat.rs:376"},{"line":74,"state":"*","event":"stale_line","guard":"","next":"-","reqs":["R2"],"source":"proposal: drop each line of an agent that is not current"}],"simplify":[],"reason":"keeps each requirement, fewer rows, passes the checks"}],"hidden":[],"checks":[{"kind":"row-no-req","machine":"chat","at":"working/ask","line":34,"detail":"no requirement"},{"kind":"row-no-req","machine":"chat","at":"resting/ask","line":36,"detail":"no requirement"},{"kind":"row-no-req","machine":"chat","at":"*/stale_line","line":50,"detail":"no requirement"},{"kind":"row-no-req","machine":"job","at":"solved/end","line":91,"detail":"no requirement"},{"kind":"row-no-req","machine":"job","at":"asked/end","line":92,"detail":"no requirement"},{"kind":"row-no-req","machine":"job","at":"meshed/end","line":93,"detail":"no requirement"}]};
+const $ = (tag, attrs = {}, ...kids) => { const e = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (v === false || v == null) continue; if (k === "text") e.textContent = v; else e.setAttribute(k, v === true ? "" : v); } e.append(...kids); return e; };
+const NS = "http://www.w3.org/2000/svg";
+// Text with \`code\` spans.
+const rich = (t) => t.split("\u0060").map((x, i) => (i % 2 ? $("code", { text: x }) : document.createTextNode(x)));
+const S = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v); return e; };
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+const BUGS = { "unreachable": "unreachable state", "dead-end": "dead end", "unhandled": "unhandled events", "two-transitions": "two transitions on one state and event", "guard-gap": "guards do not cover all cases", "row-no-req": "row with no requirement", "req-no-row": "requirement with no row" };
+const SIMP = { "merge-states": "equivalent states", "pass-through": "pass-through state", "global-event": "global event", "flag-guard": "flag in guards", "flag-states": "flag explosion", "function": "a plain function?" };
+const app = document.getElementById("app");
+const rowId = (m, r) => m + "-L" + r.line;
+const lineFinds = (list, m, r) => list.filter((f) => f.machine === m && (f.line ? f.line === r.line : f.at === r.state + "/" + r.event));
+
+function head() {
+  const bugs = DATA.checks.length, simp = DATA.machines.reduce((n, m) => n + m.simplify.length, 0);
+  const rows = DATA.machines.reduce((n, m) => n + m.rows.length, 0);
+  app.append($("h1", { text: DATA.title }), $("p", { class: "muted", text: DATA.file + " · " + DATA.machines.length + " machine(s) · " + rows + " rows · " + DATA.reqs.length + " requirements" }));
+  const v = $("ul", { class: "verdict" });
+  if (DATA.bugs.length) v.append($("li", { "data-bad": true, text: DATA.bugs.length + " proven bug" + (DATA.bugs.length === 1 ? "" : "s") }));
+  v.append($("li", { "data-bad": bugs > 0, text: bugs + " check finding" + (bugs === 1 ? "" : "s") }), $("li", { text: simp + " simplification" + (simp === 1 ? "" : "s") }));
+  for (const m of DATA.machines) v.append($("li", { text: m.name + ": " + (m.rows.length / Math.max(1, new Set(m.rows.flatMap((r) => r.reqs)).size)).toFixed(1) + " rows per requirement" }));
+  if (DATA.proposals.length) v.append($("li", { text: "simpler design below" }));
+  app.append(v);
+  for (const t of DATA.intro) app.append($("p", { class: "muted" }, ...rich(t)));
+  if (DATA.bugs.length) {
+    app.append($("h2", { text: "Proven bugs" }));
+    const ul = $("ul", { class: "finds" });
+    for (const b of DATA.bugs) ul.append($("li", { "data-bug": true }, $("b", { text: b.id }), ...rich(b.text + " Proof: "), $("code", { text: b.source })));
+    app.append(ul, $("p", { class: "muted", text: "No fix lands before you approve the bug's row here." }));
+  }
+}
+
+function findings() {
+  const steps = [
+    ["1. Question the requirements", DATA.checks.filter((f) => f.kind === "row-no-req" || f.kind === "req-no-row"), BUGS],
+    ["3. Simplify", DATA.machines.flatMap((m) => m.simplify), SIMP],
+    ["4. Kill bugs", DATA.checks.filter((f) => f.kind !== "row-no-req" && f.kind !== "req-no-row"), BUGS],
+  ];
+  app.append($("h2", { text: "Findings" }));
+  for (const [title, list, names] of steps) {
+    app.append($("h3", { text: title + " (" + list.length + ")" }));
+    const ul = $("ul", { class: "finds" });
+    if (!list.length) ul.append($("li", { class: "muted", text: "None." }));
+    for (const f of list) {
+      const li = $("li", {}, $("b", { text: names[f.kind] || f.kind }));
+      const where = f.machine === "-" ? f.at : f.machine + " · " + f.at;
+      if (f.line && f.machine !== "-") li.append($("a", { href: "#" + f.machine + "-L" + f.line, text: where }));
+      else li.append(document.createTextNode(where));
+      li.append(document.createTextNode(" — " + f.detail));
+      ul.append(li);
+    }
+    app.append(ul);
+  }
+  for (const h of DATA.hidden) app.append($("p", { class: "muted", text: "Proposal " + h.name + " is not shown: " + h.reason + "." }));
+}
+
+// Layout: columns by distance from the initial state, unreachable states last.
+function layout(m) {
+  const depth = new Map([[m.initial, 0]]), order = [m.initial];
+  for (let i = 0; i < order.length; i++) for (const r of m.rows) {
+    const from = order[i];
+    if ((r.state === from || r.state === "*") && r.next !== "-" && !depth.has(r.next)) { depth.set(r.next, depth.get(from) + 1); order.push(r.next); }
+  }
+  const max = Math.max(0, ...depth.values());
+  for (const s of m.states) if (!depth.has(s)) { depth.set(s, max + 1); order.push(s); }
+  const cols = [];
+  for (const s of order) (cols[depth.get(s)] ||= []).push(s);
+  const pos = new Map(); let x = 24, H = 40;
+  cols.forEach((col) => {
+    const w = Math.max(...col.map((s) => s.length * 7.6 + 28));
+    col.forEach((s, i) => pos.set(s, { x, y: 64 + i * 110, w: s.length * 7.6 + 28, h: 36 }));
+    x += w + 170;
+    H = Math.max(H, 64 + col.length * 110);
+  });
+  return { pos, W: x - 140, H: H + 70 };
+}
+function edgePath(a, b, bend = 0) {
+  if (a.x === b.x && a !== b) { const x = a.x + a.w, y1 = a.y + a.h / 2, y2 = b.y + b.h / 2, out = 40 + Math.abs(y2 - y1) * 0.2; return "M" + x + "," + y1 + " C" + (x + out) + "," + y1 + " " + (b.x + b.w + out) + "," + y2 + " " + (b.x + b.w) + "," + y2; }
+  if (a === b) { const x = a.x + a.w / 2, y = a.y; return "M" + (x - 10) + "," + y + " C" + (x - 30) + "," + (y - 46) + " " + (x + 30) + "," + (y - 46) + " " + (x + 10) + "," + y; }
+  if (b.x > a.x) { const x1 = a.x + a.w, y1 = a.y + a.h / 2 + bend, x2 = b.x, y2 = b.y + b.h / 2 + bend, dx = (x2 - x1) / 2; return "M" + x1 + "," + y1 + " C" + (x1 + dx) + "," + y1 + " " + (x2 - dx) + "," + y2 + " " + x2 + "," + y2; }
+  const x1 = a.x + a.w / 2, y1 = a.y + a.h, x2 = b.x + b.w / 2, y2 = b.y + b.h, drop = 50 + Math.abs(x1 - x2) * 0.15 + bend;
+  return "M" + x1 + "," + y1 + " C" + x1 + "," + (y1 + drop) + " " + x2 + "," + (y2 + drop) + " " + x2 + "," + y2;
+}
+
+function machine(m, host, bad) {
+  const { pos, W, H } = layout(m);
+  const svg = S("svg", { viewBox: "0 0 " + W + " " + H, style: "max-width:" + W + "px;min-width:" + Math.min(W, 520) + "px", role: "img", "aria-label": "State diagram of " + m.name });
+  svg.append(Object.assign(S("defs"), { innerHTML: '<marker id="arrow-' + m.name + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#bcbbb5"/></marker>' }));
+  const pairs = new Map();
+  for (const r of m.rows) {
+    if (r.next === "-" || r.state === "*") continue;
+    const k = r.state + ">" + r.next;
+    pairs.set(k, [...(pairs.get(k) || []), r]);
+  }
+  const labels = [];
+  for (const [k, rs] of pairs) {
+    const [s, n] = k.split(">");
+    const p = S("path", { class: "edge", d: edgePath(pos.get(s), pos.get(n)), "marker-end": "url(#arrow-" + m.name + ")" });
+    svg.append(p);
+    labels.push([p, rs.map((r) => r.event + (r.guard ? " [" + r.guard + "]" : "")).join(", ")]);
+  }
+  const nodes = new Map();
+  for (const s of m.states) {
+    const b = pos.get(s);
+    const g = S("g", { class: "node", "data-final": m.final.includes(s), "data-bad": bad.has(s) });
+    g.append(S("rect", { x: b.x, y: b.y, width: b.w, height: b.h, rx: 8 }));
+    const t = S("text", { x: b.x + b.w / 2, y: b.y + 23, "text-anchor": "middle" }); t.textContent = s; g.append(t);
+    if (s === m.initial) { const d = S("circle", { cx: b.x - 10, cy: b.y + b.h / 2, r: 4, fill: "#63635e" }); svg.append(d); }
+    svg.append(g); nodes.set(s, g);
+  }
+  const marker = S("circle", { class: "marker", r: 5, cx: 0, cy: 0 });
+  svg.append(marker);
+  const graph = $("div", { class: "graph" }, svg);
+  host.append(graph);
+  requestAnimationFrame(() => {
+    for (const [p, text] of labels) {
+      const pt = p.getPointAtLength(p.getTotalLength() / 2);
+      const t = S("text", { class: "elabel", x: pt.x, y: pt.y - 4, "text-anchor": "middle" }); t.textContent = text.length > 46 ? text.slice(0, 44) + "…" : text;
+      const title = S("title"); title.textContent = text; t.append(title);
+      svg.insertBefore(t, nodes.values().next().value);
+    }
+  });
+  simulator(m, host, pos, nodes, marker, svg);
+}
+
+// The simulator: fire an event, and the marker travels along the edge to the next state.
+function simulator(m, host, pos, nodes, marker, svg) {
+  let cur = m.initial, anim = null;
+  const trail = $("div", { class: "trail", "aria-live": "polite" });
+  const bar = $("div", { class: "sim" });
+  const place = (s) => { const b = pos.get(s); marker.style.transform = "translate(" + (b.x + b.w - 8) + "px," + (b.y + 8) + "px)"; };
+  const mark = () => { for (const [s, g] of nodes) g.toggleAttribute("data-current", s === cur); };
+  const rowsFor = (s) => { const own = m.rows.filter((r) => r.state === s); return own.concat(m.final.includes(s) ? [] : m.rows.filter((r) => r.state === "*" && !own.some((o) => o.event === r.event && (!r.guard || o.guard.trim() === r.guard.trim())))); };
+  function fire(r, e) {
+    host.querySelectorAll("tr[data-fired]").forEach((t) => t.removeAttribute("data-fired"));
+    document.getElementById(rowId(m.name, r))?.setAttribute("data-fired", "");
+    const from = cur, to = r.next === "-" ? cur : r.next;
+    trail.textContent = (trail.textContent ? trail.textContent + " → " : "") + r.event + (r.next === "-" ? " (ignored)" : "");
+    cur = to; mark(); buttons();
+    if (anim) anim.finish();
+    const keyboard = e && e.detail === 0;
+    if (from === to || reduce.matches || keyboard) { place(to); return; }
+    const p = S("path", { d: edgePath(pos.get(from), pos.get(to)) }); svg.append(p);
+    const L = p.getTotalLength(), frames = [];
+    for (let i = 0; i <= 24; i++) { const q = p.getPointAtLength(L * i / 24); frames.push({ transform: "translate(" + q.x + "px," + q.y + "px)" }); }
+    p.remove();
+    const b = pos.get(to); frames.push({ transform: "translate(" + (b.x + b.w - 8) + "px," + (b.y + 8) + "px)" });
+    place(to);
+    anim = marker.animate(frames, { duration: 200, easing: "cubic-bezier(0.23, 1, 0.32, 1)" });
+  }
+  function buttons() {
+    bar.replaceChildren($("span", { class: "now", text: "Fire an event in " + cur + ":" }));
+    const rs = rowsFor(cur);
+    if (!rs.length) bar.append($("span", { class: "muted", text: m.final.includes(cur) ? "final state" : "no event leaves this state" }));
+    for (const r of rs) {
+      const b = $("button", { class: "button", type: "button", "data-ignored": r.next === "-" }, r.event);
+      if (r.guard) b.append($("small", { text: "[" + r.guard + "]" }));
+      b.addEventListener("click", (e) => fire(r, e));
+      bar.append(b);
+    }
+    const reset = $("button", { class: "button", type: "button" }, "Reset");
+    reset.addEventListener("click", () => { cur = m.initial; trail.textContent = ""; if (anim) anim.finish(); place(cur); mark(); buttons(); });
+    bar.append(reset);
+  }
+  place(cur); mark(); buttons();
+  host.append(bar, trail);
+}
+
+function decide(id, kind) {
+  return $("td", { class: "dcell" }, $("div", { class: "decide" },
+    $("label", {}, $("input", { type: "radio", name: id, value: "approve", "data-kind": kind }), "Approve"),
+    $("label", {}, $("input", { type: "radio", name: id, value: "reject", "data-kind": kind }), "Reject"),
+    $("input", { type: "text", name: id + ":comment", placeholder: "Comment", "aria-label": "Comment on " + id })));
+}
+
+function rowsTable(m, review) {
+  const t = $("table");
+  t.append($("tr", {}, ...["state", "event", "guard", "next", "req", "source", "findings"].concat(review ? ["review"] : []).map((h) => $("th", { text: h }))));
+  for (const r of m.rows) {
+    const id = rowId(m.name, r);
+    const tr = $("tr", { id, "data-item": id });
+    const tags = $("td");
+    for (const f of lineFinds(DATA.checks, m.name, r)) tags.append($("span", { class: "tag", text: BUGS[f.kind] }));
+    for (const f of lineFinds(m.simplify, m.name, r)) tags.append($("span", { class: "tag", "data-kind": "simplify", text: SIMP[f.kind] }));
+    tr.append($("td", { text: r.state }), $("td", { text: r.event }), $("td", { text: r.guard }), $("td", { text: r.next === "-" ? "— (ignored)" : r.next }),
+      $("td", { class: "mono", text: r.reqs.join(" ") || "—" }), $("td", { class: "src", text: r.source }), tags);
+    if (review) tr.append(decide(id, "row"));
+    t.append(tr);
+  }
+  return $("div", { class: "rows" }, t);
+}
+
+function main() {
+  head();
+  findings();
+  for (const m of DATA.machines) {
+    const prop = DATA.proposals.find((p) => p.name === m.name);
+    app.append($("h2", { text: "Machine " + m.name }));
+    const pair = $("div", { class: "pair", "data-two": !!prop });
+    const bad = new Set(DATA.checks.filter((f) => f.machine === m.name && ["unreachable", "dead-end", "unhandled"].includes(f.kind)).map((f) => f.at));
+    const a = $("div", { class: "card" }, $("h3", { text: prop ? "Current" : "Diagram" }));
+    pair.append(a); app.append(pair); machine(m, a, bad);
+    if (prop) {
+      const b = $("div", { class: "card" }, $("h3", { text: "Simpler: " + prop.rows.length + " rows, not " + m.rows.length }), $("p", { class: "muted", text: prop.reason }));
+      pair.append(b); machine(prop, b, new Set());
+    }
+    app.append($("h3", { text: "Rows" }), rowsTable(m, true));
+    if (prop) app.append($("h3", { text: "Rows of the simpler design" }), rowsTable(prop, false));
+  }
+  app.append($("h2", { text: "Requirements" }));
+  const t = $("table", { class: "reqs" });
+  t.append($("tr", {}, ...["id", "requirement", "source", "review"].map((h) => $("th", { text: h }))));
+  for (const r of DATA.reqs) t.append($("tr", { "data-item": r.id }, $("td", { text: r.id }), $("td", {}, ...rich(r.text)), $("td", { class: "src", text: r.source }), decide(r.id, "requirement")));
+  app.append($("div", { class: "rows" }, t));
+  app.append($("p", { class: "muted", text: "A rejected row is deleted with its requirement. A found bug gets a failing test; no fix lands before you approve it here." }));
+}
+
+function items() {
+  const out = [];
+  for (const tr of document.querySelectorAll("tr[data-item]")) {
+    const id = tr.dataset.item, d = tr.querySelector("input[type=radio]:checked"), c = tr.querySelector("input[type=text]")?.value.trim();
+    tr.dataset.decision = d ? d.value : "";
+    if (d || c) out.push({ id, decision: d ? d.value : "comment", comment: c || "" });
+  }
+  return out;
+}
+function bar() {
+  const form = document.getElementById("bar"), count = document.getElementById("count"), status = document.getElementById("status");
+  document.addEventListener("input", (e) => { if (e.target.closest("main")) { const n = items().length; count.textContent = n ? n + " item(s) decided" : "No decisions yet."; } });
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const list = items();
+    if (!list.length) { status.textContent = "Decide on a row first."; return; }
+    const text = "State machine review of " + DATA.file + ":\n" + list.map((i) => i.id + ": " + i.decision + (i.comment ? " — " + i.comment : "")).join("\n");
+    if (window.lavish?.queuePrompt) {
+      window.lavish.queuePrompt("Apply this state machine review of " + DATA.file + ". Delete each rejected row and its requirement, keep each approved row, answer each comment, then run sm-axi check and render again. Account for every submitted ID.", { tag: "tracked-batch", text: "Review: " + list.length + " items", element: form, data: { items: list } });
+      status.textContent = "Queued. Press Send to agent.";
+      return;
+    }
+    try { await navigator.clipboard.writeText(text); status.textContent = "Copied the review. Paste it to the agent."; }
+    catch { form.querySelector("textarea")?.remove(); const ta = $("textarea", { rows: 6, readonly: true, "aria-label": "Review to copy" }); ta.value = text; form.append(ta); ta.select(); status.textContent = "Copy the review below."; }
+  });
+  addEventListener("load", () => { if (!window.lavish) form.querySelector("button").textContent = "Copy the review"; });
+}
+main(); bar();
+</script></body></html>

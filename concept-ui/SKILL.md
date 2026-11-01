@@ -66,21 +66,21 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Check: each cell of the matrix that is not empty has a visible signifier (icon, handle, label or hint). A gesture alone is not a signifier. A hover state alone is not a signifier, because touch screens have no hover.
 6. **Fluid motion** (Apple, Designing Fluid Interfaces; Kowalski).
    Motion follows the finger, and the user can interrupt and redirect it at any time.
-   Each animation has a purpose: spatial consistency, a change of state, or feedback. Use the action frequency from Phase 1.
+   Each animation has a purpose (M1). Use the action frequency from Phase 1.
    Check:
-   - An action that users do many times a day, or start from the keyboard, has no animation. Press feedback (rule 4), and motion that a gesture drives and its release, are not part of this check.
+   - No animation for an action that users do many times a day, or that starts from the keyboard (M2). Press feedback (rule 4), and motion that a gesture drives and its release, are not part of this check.
    - Each other UI animation changes only `transform` and `opacity`. It lasts 300 ms or less. Toasts, sheets, drawers and modals last 500 ms or less.
-   - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in`. For sheets and drawers, an example curve is `cubic-bezier(0.32, 0.72, 0, 1)`.
-   - No element starts from `scale(0)`. An element enters from `scale(0.9)` or more, with `opacity: 0`.
-   - A popover scales from its trigger (`transform-origin`). A modal scales from the centre.
-   - During an animation, a new touch stops the animation and gives control to the finger. State that can change during an animation uses a CSS transition or a spring, not keyframes.
-   - A released drag continues with the finger velocity. It dismisses when it passes a distance threshold or a velocity threshold. Thus a fast flick dismisses at any distance. Examples: a toast at 45 px or 0.11 px/ms, a drawer at 25% of its height or 0.4 px/ms.
-   - A drag past an edge is damped, not stopped. During a drag, the element captures the pointer (`setPointerCapture`).
+   - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in` (M4). For the sheet and drawer curve, see M5.
+   - An element enters from the start scale in M7, with `opacity: 0`.
+   - A popover scales from its trigger (M8). A modal scales from the centre.
+   - During an animation, a new touch stops the animation and gives control to the finger. State that can change during an animation uses a CSS transition or a spring, not keyframes (M10).
+   - A released drag continues with the finger velocity. It dismisses when it passes a distance threshold or a velocity threshold (K4). Thus a fast flick dismisses at any distance. Examples: a toast at 45 px or 0.11 px/ms, a drawer at 25% of its height or 0.4 px/ms.
+   - Drag friction and pointer capture follow K5 (`setPointerCapture`).
    - With `prefers-reduced-motion: reduce`, movement is replaced by a fade or no animation.
 7. **Mobile first**.
    Check at 375 px width:
    - The page has no horizontal scroll.
-   - Each tap target is at least 44 × 44 px.
+   - Each tap target passes L8.
    - Content and controls respect the safe-area insets (`env(safe-area-inset-*)`), and the viewport meta tag has `viewport-fit=cover`.
    - The primary controls are in the bottom half of the screen, in thumb reach.
    - Each input has a font size of 16 px or more. The viewport meta tag has no `user-scalable=no` and no `maximum-scale`.
@@ -93,11 +93,14 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Check:
    - Body text lines are 65 characters or shorter (`max-width: 65ch`).
    - Headings of 24 px or more have a letter-spacing from -0.04em to -0.02em.
-   - Numbers that change in place use `font-variant-numeric: tabular-nums`.
+   - Numbers that change in place use `font-variant-numeric: tabular-nums` (T2).
    - Content text uses no more than 3 colours: primary, secondary and one accent.
 9. **Worst-case content** (Kowalski).
-   Demo data makes a design look good. Real data breaks it.
+   Demo data makes a design look good. Real data breaks it (L10).
    Check: render each object with 0, 1 and many items, with missing optional fields, and with the longest value that the schema accepts. If the schema has no limit, use a long real name. No text overflows or clips. Counts use the correct plural ("1 member", with `Intl.PluralRules`).
+
+When the target is a web page, audit it against `references/design-audit.md`.
+Audit one page at a time. Mark each rule Pass, Fail or N/A. A Fail needs a fix or a written reason.
 
 ## Output
 

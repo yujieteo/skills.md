@@ -1,0 +1,33 @@
+file: faults.sm.md
+machines[5]{name,states,events,rows,reqs,rows_per_req}:
+  bugs,6,3,10,2,5.0
+  simp,4,5,14,3,4.7
+  twins,4,3,8,2,4.0
+  flags,4,3,10,1,10.0
+  pipe,3,2,4,1,4.0
+simplify[9]{kind,machine,at,line,detail}:
+  global-event,bugs,stop,L19,"3 rows (a b d) -> done: write one * row"
+  global-event,simp,cancel,L39,"3 rows (idle load run) -> done: write one * row"
+  flag-guard,simp,busy,L42,"4 rows in 2 states test it: a hidden state?"
+  merge-states,twins,p+q,-,same rows to the same states
+  merge-states,flags,on_open+off_open,-,same rows to the same states
+  merge-states,flags,on_closed+off_closed,-,same rows to the same states
+  flag-states,flags,on_open off_open on_closed off_closed,-,"state names combine flags: one machine for each flag?"
+  pass-through,pipe,check,L93,"read -> check -> written: delete check"
+  function,pipe,pipe,-,"no branch and no loop: is a plain function better?"
+checks[8]{kind,machine,at,line,detail}:
+  unreachable,bugs,d,-,no path from the initial state
+  unhandled,bugs,c,-,"events: stop"
+  dead-end,bugs,e,-,no exit and not final
+  unhandled,bugs,e,-,"events: go stop"
+  guard-gap,bugs,b/go,L20,"only \"ok\": add an else row"
+  two-transitions,bugs,c/go,L23,2 rows with overlapping guards
+  row-no-req,bugs,d/stop,L25,no requirement
+  req-no-row,-,R9,L9,no row cites it
+proposals[2]{machine,rows,current_rows,status,reason}:
+  twins,6,8,shown,"keeps each requirement, fewer rows, passes the checks"
+  bugs,1,10,hidden,drops R2
+help[3]:
+  Fix each check finding in faults.sm.md, or ask the owner to reject its row; then run `sm-axi check faults.sm.md` again
+  Write a simpler design as "## Proposal <machine>"; it shows only if it keeps each requirement, has fewer rows and passes the checks
+  Run `sm-axi render faults.sm.md` to write the review page

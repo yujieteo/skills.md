@@ -1,0 +1,25 @@
+file: chat.sm.md
+machines[2]{name,states,events,rows,reqs,rows_per_req}:
+  chat,4,7,20,7,2.9
+  job,5,7,18,7,2.6
+bugs[1]{id,proof}:
+  B1,tests/chat_stale_line.rs fails on 321483d6
+simplify[5]{kind,machine,at,line,detail}:
+  global-event,chat,exit,L42,"3 rows (working broken resting) -> none: write one * row"
+  merge-states,job,asked+meshed,-,same rows to the same states
+  pass-through,job,reported,L90,"solved -> reported -> idle: delete reported"
+  global-event,job,open,L85,"3 rows (asked meshed solved) -> solved: write one * row"
+  global-event,job,end,L90,"4 rows (reported solved asked meshed) -> idle: write one * row"
+checks[6]{kind,machine,at,line,detail}:
+  row-no-req,chat,working/ask,L34,no requirement
+  row-no-req,chat,resting/ask,L36,no requirement
+  row-no-req,chat,*/stale_line,L50,no requirement
+  row-no-req,job,solved/end,L91,no requirement
+  row-no-req,job,asked/end,L92,no requirement
+  row-no-req,job,meshed/end,L93,no requirement
+proposals[1]{machine,rows,current_rows,status,reason}:
+  chat,16,20,shown,"keeps each requirement, fewer rows, passes the checks"
+help[3]:
+  Fix each check finding in chat.sm.md, or ask the owner to reject its row; then run `sm-axi check chat.sm.md` again
+  Write a simpler design as "## Proposal <machine>"; it shows only if it keeps each requirement, has fewer rows and passes the checks
+  Run `sm-axi render chat.sm.md` to write the review page

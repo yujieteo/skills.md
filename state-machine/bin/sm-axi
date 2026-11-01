@@ -308,7 +308,7 @@ function render(file, outPath) {
   const target = outPath || file.replace(/(\.sm)?\.md$/, "") + ".html";
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   fs.mkdirSync(path.dirname(path.resolve(target)), { recursive: true });
-  fs.writeFileSync(target, PAGE.replace("/*DATA*/null", json).replace("<!--TITLE-->", esc(data.title)));
+  fs.writeFileSync(target, PAGE.replace("/*DATA*/null", () => json).replace("<!--TITLE-->", () => esc(data.title)));
   process.stdout.write(`wrote: ${q(target)}\n` + help([
     `Run \`lavish-axi ${target}\` to open the review board; approve, reject or comment on each row there`,
     "Without lavish-axi, open the file in a browser; \"Copy the review\" puts the decisions on the clipboard",
@@ -537,7 +537,7 @@ function simulator(m, host, pos, nodes, marker, svg) {
   const bar = $("div", { class: "sim" });
   const place = (s) => { const b = pos.get(s); marker.style.transform = "translate(" + (b.x + b.w - 8) + "px," + (b.y + 8) + "px)"; };
   const mark = () => { for (const [s, g] of nodes) g.toggleAttribute("data-current", s === cur); };
-  const rowsFor = (s) => { const own = m.rows.filter((r) => r.state === s); return own.concat(m.rows.filter((r) => r.state === "*" && !own.some((o) => o.event === r.event && (!r.guard || o.guard.trim() === r.guard.trim())))); };
+  const rowsFor = (s) => { const own = m.rows.filter((r) => r.state === s); return own.concat(m.final.includes(s) ? [] : m.rows.filter((r) => r.state === "*" && !own.some((o) => o.event === r.event && (!r.guard || o.guard.trim() === r.guard.trim())))); };
   function fire(r, e) {
     host.querySelectorAll("tr[data-fired]").forEach((t) => t.removeAttribute("data-fired"));
     document.getElementById(rowId(m.name, r))?.setAttribute("data-fired", "");

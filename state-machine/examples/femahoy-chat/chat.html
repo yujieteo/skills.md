@@ -214,7 +214,7 @@ function simulator(m, host, pos, nodes, marker, svg) {
   const bar = $("div", { class: "sim" });
   const place = (s) => { const b = pos.get(s); marker.style.transform = "translate(" + (b.x + b.w - 8) + "px," + (b.y + 8) + "px)"; };
   const mark = () => { for (const [s, g] of nodes) g.toggleAttribute("data-current", s === cur); };
-  const rowsFor = (s) => { const own = m.rows.filter((r) => r.state === s); return own.concat(m.rows.filter((r) => r.state === "*" && !own.some((o) => o.event === r.event && (!r.guard || o.guard.trim() === r.guard.trim())))); };
+  const rowsFor = (s) => { const own = m.rows.filter((r) => r.state === s); return own.concat(m.final.includes(s) ? [] : m.rows.filter((r) => r.state === "*" && !own.some((o) => o.event === r.event && (!r.guard || o.guard.trim() === r.guard.trim())))); };
   function fire(r, e) {
     host.querySelectorAll("tr[data-fired]").forEach((t) => t.removeAttribute("data-fired"));
     document.getElementById(rowId(m.name, r))?.setAttribute("data-fired", "");

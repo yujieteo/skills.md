@@ -69,7 +69,7 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
    Each animation has a purpose (M1). Use the action frequency from Phase 1.
    Check:
    - No animation for an action that users do many times a day, or that starts from the keyboard (M2). Press feedback (rule 4), and motion that a gesture drives and its release, are not part of this check.
-   - Each other UI animation changes only `transform` and `opacity`. It lasts 300 ms or less. Toasts, sheets, drawers and modals last 500 ms or less.
+   - Each other UI animation changes only `transform`, `opacity`, `clip-path` and a small `blur` (M12). It lasts 300 ms or less. Toasts, sheets, drawers and modals last 500 ms or less.
    - Elements that enter or exit use an ease-out curve, for example `cubic-bezier(0.23, 1, 0.32, 1)`. No UI animation uses `ease-in` (M4). For the sheet and drawer curve, see M5.
    - An element enters from the start scale in M7, with `opacity: 0`.
    - A popover scales from its trigger (M8). A modal scales from the centre.
@@ -91,7 +91,7 @@ Then apply the rules below. Each rule is a check. Record pass or fail for each c
 8. **Type and colour restraint** (Kowalski).
    Make the hierarchy with weight, colour and space first, and with size last.
    Check:
-   - Body text lines are 65 characters or shorter (`max-width: 65ch`).
+   - The body text column is 692 px wide or less (`max-width: 692px`) (T4).
    - Headings of 24 px or more have a letter-spacing from -0.04em to -0.02em.
    - Numbers that change in place use `font-variant-numeric: tabular-nums` (T2).
    - Content text uses no more than 3 colours: primary, secondary and one accent.

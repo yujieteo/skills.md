@@ -73,7 +73,7 @@ The 7 checks run on what remains:
 
 For each finding that is a fault in the code (not only in the table):
 
-1. Write a failing test in the test style of the target project. Name the row of the machine in its first comment.
+1. Write a failing test in the test style of the target project. Name the row of the machine in the test name.
 2. Run it and see it fail for the right reason. When the project is read-only, run it in a scratch copy.
 3. Add the bug to `## Bugs` with the test path as its proof.
 4. Do not fix it. The owner decides on the board.

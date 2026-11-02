@@ -1,11 +1,11 @@
 # skills.md
 
-Agent skills that are invoked by name.
+Agent skills for Claude Code that you invoke by name.
 
 ## Skills
 
-- [concept-ui](concept-ui/SKILL.md): redesign an app or a screen from its conceptual model, then map the model to a layered, direct-manipulation, mobile-first interface.
-- [state-machine](state-machine/SKILL.md): model code or a requirement as one state table, delete the rows and requirements that are not necessary, show a simpler design, prove each bug with a failing test, and review it on an HTML board. The CLI is `state-machine/bin/sm-axi` (Node, no dependencies). Example: [femahoy chat](state-machine/examples/femahoy-chat/).
+- [concept-ui](concept-ui/SKILL.md): UI redesign. Redesign an app or a screen from its conceptual model, then map the model to a layered, direct-manipulation, mobile-first interface.
+- [state-machine](state-machine/SKILL.md): requirement and code review. Model code or a requirement as one state table, delete the rows and requirements that are not necessary, show a simpler design, prove each bug with a failing test, and review it on an HTML board. The CLI is `state-machine/bin/sm-axi` (Node, no dependencies). Example: [femahoy chat](state-machine/examples/femahoy-chat/).
 
 ## Install for Claude Code
 

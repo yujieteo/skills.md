@@ -1,6 +1,6 @@
 ---
 name: guardrails
-description: Find the parts that a project has (a fixed bug, comments, types, states, hot paths, web pages, a simulation, tuned parameters, pure functions, parsers, printed output, dead code, C code, an app) and add the related lint rule, type, test, budget check, state model, replay, property test, fuzz target, expect test, dead-code check, sanitizer build or verification rule in the tools of that project. For explicit use only, when the user invokes /guardrails.
+description: Find the parts that a project has (a fixed bug, comments, types, states, hot paths, web pages, a simulation, tuned parameters, pure functions, parsers, printed output, a deterministic transform, dead code, C code, an app) and add the related lint rule, type, test, budget check, state model, replay, property test, fuzz target, expect test, output replay, dead-code check, sanitizer build or verification rule in the tools of that project. For explicit use only, when the user invokes /guardrails.
 disable-model-invocation: true
 ---
 
@@ -20,6 +20,7 @@ Read the build files, the linter config, the tests and the main loop. Write one 
 | Part | Found | Evidence (`file:line`) | Step |
 |---|---|---|---|
 
+Give one row to each deterministic transform: a part whose output depends only on its input (for example a compiler, a code generator, a renderer, a serializer, a build step or app logic with an output that a test can capture).
 Write "no" for each part that the project does not have. Do not add a part to make a step apply.
 
 ## Step 1: A bug becomes a rule
@@ -134,7 +135,22 @@ Applies when: code makes output that a person reads to check it (for example com
 
 Reason: the printed text shows the behavior in one place, as the fixture tests of a compiler do. The reviewer reads one diff of text, not each assertion.
 
-## Step 11: Dead code
+## Step 11: Output replay
+
+Applies when: step 0 found a deterministic transform.
+Use step 10 for a small output that a person reads. Use this step for a large generated output (for example a whole C file or a GPU kernel). Step 7 stays for a simulation.
+Source of the idea: https://github.com/tinygrad/tinygrad/blob/master/test/external/process_replay/README.md
+
+1. Add a capture switch (for example an environment variable). When the existing tests run with it, the transform writes each input to a local cache outside the repository.
+2. Add a replay command. It runs the base commit and the branch, each in an isolated copy (for example a git worktree). It gives each captured input to the transform of each commit and diffs the outputs.
+3. Treat each commit as a refactor: the command fails on each diff. Nothing in the commit (for example a title tag or a trailer) can turn the check off.
+4. When a change must change the output, the command prints the diff. It passes only when the person who runs it accepts that diff on that run (for example with an `--accept` flag).
+5. When more than 20% of the outputs differ, the command stops early and reports a large change. Without an accept, this is a failure.
+6. Run the command locally before a review. Do not add it to CI.
+
+Reason: a refactor of a transform can change one output in a thousand, and no test asserts that output. The inputs of the existing tests find it. An accept on each run makes a person read the diff, and a commit cannot skip the check. The early stop saves time when the diff is too large to read.
+
+## Step 12: Dead code
 
 Applies when: the project has source code.
 
@@ -145,7 +161,7 @@ Applies when: the project has source code.
 
 Reason: an agent adds new code next to old code, because a deletion needs proof. The reference query gives the proof, and the build fails until the old code goes.
 
-## Step 12: C sanitizers
+## Step 13: C sanitizers
 
 Applies when: the project ships C or C++ code, also C that a compiler generates (for example from Goose).
 
@@ -155,7 +171,7 @@ Applies when: the project ships C or C++ code, also C that a compiler generates 
 
 Reason: undefined behavior and memory faults often give the correct result in a test, then fail on another compiler or input. A sanitizer stops the test at the fault.
 
-## Step 13: Verify
+## Step 14: Verify
 
 Applies when: the project has an app that a person or a program starts (for example a web site, a server, a command or a game).
 
@@ -172,4 +188,4 @@ Reason: tests show that the parts work, but only a start of the app shows that a
 - For each check that runs (for example a lint rule, a type, a test, a budget, a model, a dead-code build failure, a sanitizer build or a fuzz target): the break that it caught.
 - For step 6: for each route or template and for the default, the largest current page total and the budget.
 - For each step that does not apply: one line that names the missing part.
-- The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, the bugs that the new rules found, and `/create-verification-skill` when step 13 found no verification skill.
+- The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, the bugs that the new rules found, and `/create-verification-skill` when step 14 found no verification skill.

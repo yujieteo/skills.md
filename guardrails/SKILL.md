@@ -10,7 +10,7 @@ Make the tools stop a fault, so that no person must remember a rule.
 The target is the project or the bug that the user names. If the user names no target, ask for one.
 Do the steps in sequence. Each step starts with "Applies when". If the project does not have that part, do not change the project for that step.
 Use the language, linter, test runner and build of the project. Add a new tool only when the project has none for that job.
-Before you keep a new rule, type, test, budget or model, break the code that it guards. See the check fail, then remove the break.
+Before you keep a new check that runs (a lint rule, type, test, budget or model), break the code that it guards. See the check fail, then remove the break. A rule in the agent instructions has no break.
 A raised budget or a new excluded file needs the approval of the owner and a reason in the change. Never disable a check: fix the code, or delete the check with the approval of the owner.
 
 ## Step 0: Find the parts
@@ -67,7 +67,7 @@ Applies when: a major system keeps a state that changes on events (for example a
 2. Each bug that it proves goes to step 1.
 3. When an invariant is critical (for example money, data loss or access control) and the state table is too large to check by hand, use a model checker.
 4. When pstack is installed, run `/create-formal-verification-skill` for that invariant. Else, write the model (for example in TLA+) from the machine file.
-5. Next to the model, record the files that it covers and the commit that it matches. Check the invariant on each change of these files.
+5. In the model checker config or a check script, record the files that the model covers and a hash of these files. Make the project test or build check fail when a covered file changes after the record. To pass, run the model checker again and update the hash. Do not use a comment or a prose note for the record.
 
 Reason: state bugs live in combinations of flags that no test tries. The state table finds them, and a model checker tries all combinations. Formal methods were expensive, but an agent makes a model cheap to write.
 
@@ -168,7 +168,8 @@ Reason: tests show that the parts work, but only a start of the app shows that a
 ## Done
 
 - The part table of step 0.
-- For each step that applies: the rule, type, test or check, its path, its first run output, and the break that it caught.
+- For each step that applies: the rule, type, test or check, its path and its first run output.
+- For each check that runs (a lint rule, type, test, budget or model): the break that it caught.
 - For step 6: for each route or template and for the default, the largest current page total and the budget.
 - For each step that does not apply: one line that names the missing part.
 - The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, the bugs that the new rules found, and `/create-verification-skill` when step 13 found no verification skill.

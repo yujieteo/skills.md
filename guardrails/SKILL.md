@@ -1,6 +1,6 @@
 ---
 name: guardrails
-description: Find the parts that a project has (a fixed bug, comments, types, states, hot paths, web pages, a simulation, tuned parameters, pure functions, parsers, printed output) and add the related lint rule, type, test, budget check, state model, replay, property test, fuzz target or expect test in the tools of that project. For explicit use only, when the user invokes /guardrails.
+description: Find the parts that a project has (a fixed bug, comments, types, states, hot paths, web pages, a simulation, tuned parameters, pure functions, parsers, printed output, dead code, C code, an app) and add the related lint rule, type, test, budget check, state model, replay, property test, fuzz target, expect test, dead-code check, sanitizer build or verification rule in the tools of that project. For explicit use only, when the user invokes /guardrails.
 disable-model-invocation: true
 ---
 
@@ -10,6 +10,8 @@ Make the tools stop a fault, so that no person must remember a rule.
 The target is the project or the bug that the user names. If the user names no target, ask for one.
 Do the steps in sequence. Each step starts with "Applies when". If the project does not have that part, do not change the project for that step.
 Use the language, linter, test runner and build of the project. Add a new tool only when the project has none for that job.
+Before you keep a new rule, type, test, budget or model, break the code that it guards. See the check fail, then remove the break.
+A raised budget or a new excluded file needs the approval of the owner and a reason in the change. Never disable a check: fix the code, or delete the check with the approval of the owner.
 
 ## Step 0: Find the parts
 
@@ -32,14 +34,15 @@ Reason: a fixed bug comes back when the next change does not know about it. A ru
 
 ## Step 2: No comments
 
-Applies when: the project has source code. Tool directives (for example a lint disable, a shebang or a type pragma) and licence headers are not comments for this rule.
+Applies when: the project has source code. Tool directives (for example a lint disable, a shebang or a type pragma) and licence headers are not comments for this rule, but item 7 applies to a lint disable.
 
 1. Choose the excluded files. Exclude a file that a tool writes (generated code, a lock file, build output) or that comes from another project (vendored or copied code). Start from the paths that the ignore files, the package manager and the build already name. Add a copied file only when its source and licence are known. Write the list once, in the lint config.
-2. Add a lint rule that bans comments in all other files. Find comments with a parser or a lexer of the language: the comment rule of the project linter, a tree-sitter query, or the tokenizer of the language.
+2. Add a lint rule that bans comments in all other files. Keep only a comment that links to an outside source: an issue, an RFC, a paper or a credit to an author. Find comments with a parser or a lexer of the language: the comment rule of the project linter, a tree-sitter query, or the tokenizer of the language.
 3. Do not find comments with a text pattern (for example grep for `#` or `//`). A text pattern also matches a colour value such as `#fff`, a URL and a string.
 4. Change each comment that the rule finds. When a comment explains code, give the code a better name. When a comment states a behavior, write a test with that behavior as its name.
-5. When a fact fits no name and no test (for example a build tool version, a hash file or a source link), put it in code that runs. Use a named constant, a type, an assertion in the build script, or an error message that prints when the fact is broken.
+5. When a fact fits no name and no test (for example a build tool version or a hash file), put it in code that runs. Use a named constant, a type, an assertion in the build script, or an error message that prints when the fact is broken.
 6. Never move a fact into a README or another prose file. Delete a comment only when its fact is in code that runs, from before or from item 4 or 5.
+7. Do not keep a lint disable of a rule that catches real bugs (for example a type error or an unused result). Fix the code, then remove the disable.
 
 Reason: a comment does not run, so it becomes wrong when the code changes, and a README becomes wrong in the same way. A name, a test or a check stays true or fails. A parser reads comments as the compiler reads them, so it does not match strings or colour values.
 
@@ -50,7 +53,9 @@ Applies when: the project has a static type checker (for example TypeScript, Rus
 1. Turn on the strictest mode of the type checker that the build can pass. Make the build fail on a type error.
 2. Find each value that can hold an illegal state: flags that exclude each other, optional fields that are always set together, and plain strings or numbers for ids and units.
 3. Change each one to a type that cannot hold the illegal state: a tagged union for exclusive states, one record for fields that are set together, and a distinct type for each id and unit.
-4. Each illegal state that the code can reach is a bug: it goes to step 1.
+4. Parse outside data (JSON, a config file, environment variables or a request) into a type at the boundary. Inside the boundary, use only the parsed type.
+5. Derive each type from the schema that owns the shape (for example a database schema, an OpenAPI file or a protobuf file). Do not write the same shape again by hand.
+6. Each illegal state that the code can reach is a bug: it goes to step 1.
 
 Reason: the type checker gives feedback on each build, and it checks a rule in all of the code at once. A test checks only the cases that it runs.
 
@@ -60,7 +65,9 @@ Applies when: a major system keeps a state that changes on events (for example a
 
 1. Run `/state-machine` on each major system. Make one machine file for each system.
 2. Each bug that it proves goes to step 1.
-3. When an invariant is critical (for example money, data loss or access control) and the state table is too large to check by hand, write a model in a model checker (for example TLA+). Make the model from the machine file, and check the invariant on each change of the machine.
+3. When an invariant is critical (for example money, data loss or access control) and the state table is too large to check by hand, use a model checker.
+4. When pstack is installed, run `/create-formal-verification-skill` for that invariant. Else, write the model (for example in TLA+) from the machine file.
+5. Next to the model, record the files that it covers and the commit that it matches. Check the invariant on each change of these files.
 
 Reason: state bugs live in combinations of flags that no test tries. The state table finds them, and a model checker tries all combinations. Formal methods were expensive, but an agent makes a model cheap to write.
 
@@ -122,15 +129,46 @@ Reason: a person writes the test inputs that the person expects. A generator tri
 Applies when: code makes output that a person reads to check it (for example compiler or parser output, a report, a rendered table or a state trace), or a test asserts many fields one by one.
 
 1. Use the snapshot or expect test tool of the test runner (for example Vitest snapshots, insta, ppx_expect or syrupy).
-2. Write a test that prints the output as readable text and keeps the printed text in the test or in a fixture file next to it.
+2. Write a test that prints the output as readable text and keeps the printed text in the test or in a fixture file next to it. Print only what a user of the code can see, not internal state.
 3. Make the test fail on each difference and show the diff. Update the kept text only with a command, so that the change shows in the review.
 
 Reason: the printed text shows the behavior in one place, as the fixture tests of a compiler do. The reviewer reads one diff of text, not each assertion.
 
+## Step 11: Dead code
+
+Applies when: the project has source code.
+
+1. Use the dead-code rule of the project linter, or add a dead-code tool of the language (for example knip, cargo-udeps, or the unused warnings of the compiler as errors). Make the build fail on each unreferenced file, export, function or dependency.
+2. Use the excluded files of step 2. Give each public entry point to the tool as a root.
+3. Delete each unreferenced symbol that the tool finds. Ask the owner before you delete a public API.
+4. Write this rule in the agent instructions of the project: before you end a change, find the references of each symbol that the change replaced. Use the language server or the compiler. At zero references, delete the symbol.
+
+Reason: an agent adds new code next to old code, because a deletion needs proof. The reference query gives the proof, and the build fails until the old code goes.
+
+## Step 12: C sanitizers
+
+Applies when: the project ships C or C++ code, also C that a compiler generates (for example from Goose).
+
+1. Add a test build that compiles with `-fsanitize=undefined,address` and `-fno-sanitize-recover=all`.
+2. Run all tests on that build in CI. A sanitizer report fails the test.
+3. Each fault that a sanitizer reports goes to step 1. For generated C, fix the generator, not the generated file.
+
+Reason: undefined behavior and memory faults often give the correct result in a test, then fail on another compiler or input. A sanitizer stops the test at the fault.
+
+## Step 13: Verify
+
+Applies when: the project has an app that a person or a program starts (for example a web site, a server, a command or a game).
+
+1. Find the verification skill or command of the project (for example a `verify-*` skill). It starts the app and proves a change on the path of a user.
+2. When the project has one, write this rule in the agent instructions of the project: before you say that a change is done, run it and show its output.
+3. When the project has none, do not write one. Name `/create-verification-skill` in Done as an open question.
+
+Reason: tests show that the parts work, but only a start of the app shows that a change works for a user. The agent then gives proof, not a guess.
+
 ## Done
 
 - The part table of step 0.
-- For each step that applies: the rule, type, test or check, its path, and its first run output.
+- For each step that applies: the rule, type, test or check, its path, its first run output, and the break that it caught.
 - For step 6: for each route or template and for the default, the largest current page total and the budget.
 - For each step that does not apply: one line that names the missing part.
-- The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, and the bugs that the new rules found.
+- The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, the bugs that the new rules found, and `/create-verification-skill` when step 13 found no verification skill.

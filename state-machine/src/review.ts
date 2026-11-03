@@ -1,14 +1,6 @@
-import { FINDING_KINDS, type Finding } from "./model.ts";
+import { FINDING_KINDS, type Finding, type Item, type Row } from "./model.ts";
 
-export type ReviewRow = {
-  line: number;
-  state: string;
-  event: string;
-  guard: string;
-  next: string;
-  reqs: string[];
-  source: string;
-};
+export type ReviewRow = Omit<Row, "req">;
 
 export type ReviewMachine = {
   name: string;
@@ -22,7 +14,7 @@ export type ReviewMachine = {
 
 type ReviewProposal = ReviewMachine & { reason: string };
 
-type ReviewItem = { id: string; text: string; source: string };
+export type ReviewItem = Omit<Item, "line">;
 
 export type ReviewData = {
   title: string;
@@ -38,16 +30,16 @@ export type ReviewData = {
 
 type Reader<T> = (v: unknown, at: string) => T;
 
-const fail = (at: string, want: string): never => {
-  throw new Error(`review data: ${at} is not ${want}`);
+export const fail = (at: string, want: string): never => {
+  throw new Error(`${at} is not ${want}`);
 };
 
-const record = (v: unknown, at: string): Record<string, unknown> => {
+export const record = (v: unknown, at: string): Record<string, unknown> => {
   if (typeof v !== "object" || v === null || Array.isArray(v)) return fail(at, "an object");
   return Object.fromEntries(Object.entries(v));
 };
-const str: Reader<string> = (v, at) => (typeof v === "string" ? v : fail(at, "a string"));
-const num: Reader<number> = (v, at) => (typeof v === "number" ? v : fail(at, "a number"));
+export const str: Reader<string> = (v, at) => (typeof v === "string" ? v : fail(at, "a string"));
+export const num: Reader<number> = (v, at) => (typeof v === "number" ? v : fail(at, "a number"));
 const list =
   <T>(read: Reader<T>): Reader<T[]> =>
   (v, at) => {

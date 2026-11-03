@@ -1,6 +1,6 @@
-type Item = { id: string; text: string; source: string; line: number };
+export type Item = { id: string; text: string; source: string; line: number };
 
-type Row = {
+export type Row = {
   line: number;
   state: string;
   event: string;

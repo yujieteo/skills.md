@@ -4,6 +4,7 @@ import { homedir } from "node:os";
 import path from "node:path";
 import type { Figure, Library, Rect, SvgNode } from "../schematic-emil/style.ts";
 import type { FigureExport } from "../schematic-emil/tokens.ts";
+import { fail, num, record, str } from "../state-machine/src/review.ts";
 
 export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
@@ -40,15 +41,6 @@ export function capture(input: ReplayInput): void {
   writeFileSync(path.join(dir, createHash("sha256").update(text).digest("hex").slice(0, 16) + ".json"), text);
 }
 
-const fail = (at: string, want: string): never => {
-  throw new Error(`replay input: ${at} is not ${want}`);
-};
-const record = (v: unknown, at: string): Record<string, unknown> => {
-  if (typeof v !== "object" || v === null || Array.isArray(v)) return fail(at, "an object");
-  return Object.fromEntries(Object.entries(v));
-};
-const str = (v: unknown, at: string): string => (typeof v === "string" ? v : fail(at, "a string"));
-const num = (v: unknown, at: string): number => (typeof v === "number" ? v : fail(at, "a number"));
 const bool = (v: unknown, at: string): boolean => (typeof v === "boolean" ? v : fail(at, "a boolean"));
 const strings = (v: unknown, at: string): Record<string, string> =>
   Object.fromEntries(Object.entries(record(v, at)).map(([k, x]) => [k, str(x, `${at}.${k}`)]));

@@ -2,7 +2,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parse, run, type Doc, type Finding } from "../src/model.ts";
-import type { ReviewData, ReviewMachine } from "../src/review.ts";
+import type { ReviewData, ReviewItem, ReviewMachine } from "../src/review.ts";
 import { help, q, table } from "../src/toon.ts";
 import type { Analysis, Machine } from "../src/model.ts";
 
@@ -109,7 +109,7 @@ async function render(file: string | undefined, outPath: string): Promise<number
     rows: m.rows.map((r) => ({ line: r.line, state: r.state, event: r.event, guard: r.guard, next: r.next, reqs: r.reqs, source: r.source })),
     simplify: a.simplify,
   });
-  const item = ({ id, text, source }: { id: string; text: string; source: string }): { id: string; text: string; source: string } => ({ id, text, source });
+  const item = ({ id, text, source }: ReviewItem): ReviewItem => ({ id, text, source });
   const data: ReviewData = {
     title: doc.title || path.basename(doc.file),
     file: path.basename(doc.file),
@@ -128,10 +128,7 @@ async function render(file: string | undefined, outPath: string): Promise<number
   mkdirSync(path.dirname(path.resolve(target)), { recursive: true });
   writeFileSync(
     target,
-    template
-      .replace("__DATA__", () => json)
-      .replace("__SCRIPT__", () => script)
-      .replace("__TITLE__", () => esc(data.title)),
+    template.replace(/__(DATA|SCRIPT|TITLE)__/g, (_, key: string) => (key === "DATA" ? json : key === "SCRIPT" ? script : esc(data.title))),
   );
   out(
     `wrote: ${q(target)}\n` +

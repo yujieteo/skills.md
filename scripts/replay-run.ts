@@ -3,8 +3,6 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { decodeInput, evaluatePatent, evaluateStyle, installDomStubs, toJson, type Json, type SmInput, type StyleApi } from "./replay-lib.ts";
 
-const REPLAY_PAGE_SCRIPT = /<script[^>]*>[\s\S]*?<\/script>/g;
-
 function smEntry(root: string): string[] {
   const ts = path.join(root, "state-machine", "bin", "sm-axi.ts");
   return existsSync(ts) ? [process.execPath, ts] : ["node", path.join(root, "state-machine", "bin", "sm-axi")];
@@ -23,7 +21,7 @@ function runSm(root: string, input: SmInput): Json {
     if (input.command === "render" && existsSync(outFile)) {
       const html = readFileSync(outFile, "utf8");
       result.data = html.match(/^const DATA = (.*);$/m)?.[1] ?? null;
-      result.page = html.replace(REPLAY_PAGE_SCRIPT, "");
+      result.page = html;
     }
     return result;
   } finally {

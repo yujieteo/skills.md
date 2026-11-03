@@ -33,7 +33,7 @@ If the request names no venue, infer it: a blog post is `web`, a paper is `journ
 
 - **Font.** Inter for all text. `useEmil` loads it and sets the site font features `"cv01", "ss03"`. Use weight 500 (`E.weight.name`) for the name of a part, 400 for other text, and 600 for a title.
 - **Gray first.** Draw most marks in the 12-step gray (`E.gray[100]` to `E.gray[1200]`). Background 100, text 1200, secondary text 1100, lines and outlines 700 to 900.
-- **Colour.** Add a colour only where a part must look different from the other parts. Use as many hues as the figure needs, from `E.hue` (blue, sky, grass, amber, orange, tomato, violet). Step 3 is an area tint, step 7 an outline, step 9 a solid mark, step 11 a line or a label.
+- **Colour.** Add a colour only where a part must look different from the other parts. Use as many hues as the figure needs, from `E.hue` (blue, sky, grass, amber, orange, tomato, violet). Step 3 is an area tint, step 7 an outline, step 9 a solid mark, step 11 a line or a label. Text on a step 9 solid mark uses `E.onSolid[hue]` (white on blue, grass, orange, tomato and violet, gray 1200 light on sky and amber). It has the same value in light and dark mode, as step 9 does.
 - **Cards.** A box is a card: fill gray 100, a 1 px ring in gray 400, and 12 px corners (`E.card(r.card)`). A small tag has 6 px corners (`r.chip`). Fill a card with a step 3 tint and outline it with step 7 only when it must stand out.
 - **Lines.** Borders are 1 px (`line.thin`). A main stroke is 2 px (`line.bold`). Use no shadows, gradients or glows. An upstream part that has a gradient (for example `L.laser` or `L.camera`) does not have the site look: draw a card in its place.
 - **Text.** Labels are 14 px and secondary text is 12 px. The site makes a heading with weight, not with size. Do not make a label larger to show that it is important.
@@ -44,7 +44,7 @@ If the request names no venue, infer it: a blog post is `web`, a paper is `journ
 
 - Call `E.emilTheme(F)` last in `draw()`. Each colour becomes `var(--color-<token>, <light value>)`. The gray names are the names that the site uses (`--color-gray-1200`).
 - **Dark mode.** Put the SVG inline in the page. It then takes the colour tokens of the page, and it switches under a `.dark` class. A standalone SVG switches with `prefers-color-scheme`. A standalone SVG in an `<img>` cannot load Inter, so it shows the system font.
-- **Static by default.** The option `animate` calls `E.emilTheme(F, { animate: true })`. The panels then come in one after the other with opacity and a 4 px move, with the `emil-design-eng` ease-out `cubic-bezier(0.23, 1, 0.32, 1)`. Read the installed `emil-design-eng` skill before you add or change a motion. No motion occurs under `prefers-reduced-motion: reduce`. The PNG and the PDF show the end state.
+- **Static by default.** The option `animate` calls `E.emilTheme(F, { animate: true })`. The panels then come in one after the other with opacity and a 4 px move, in 300 ms with a 60 ms stagger, with the `emil-design-eng` ease-out `cubic-bezier(0.23, 1, 0.32, 1)`. Read the installed `emil-design-eng` skill before you add or change a motion. No motion occurs under `prefers-reduced-motion: reduce`. The PNG and the PDF show the end state.
 - Papers, slides and patents stay light.
 
 ## Patent sheets

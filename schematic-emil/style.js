@@ -28,8 +28,13 @@ export const TOKENS = {
   'violet-3': ['#f4f0fe', '#291f43'], 'violet-7': ['#c2b5f5', '#56468b'], 'violet-9': ['#6e56cf', '#6e56cf'], 'violet-11': ['#6550b9', '#baa7ff'],
 };
 const light = (n) => TOKENS[n][0];
+const rgb = (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16));
 export const gray = Object.fromEntries([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200].map((k) => [k, light(`gray-${k}`)]));
 export const hue = Object.fromEntries(['blue', 'sky', 'grass', 'amber', 'orange', 'tomato', 'violet'].map((h) => [h, { 3: light(`${h}-3`), 7: light(`${h}-7`), 9: light(`${h}-9`), 11: light(`${h}-11`) }]));
+// Text on a step 9 solid mark. Step 9 does not change in dark mode, so this text does not change either.
+// rgb() and not hex: emilTheme themes only hex colours, so these stay fixed.
+const WHITE = 'rgb(255, 255, 255)', DARK = `rgb(${rgb(light('gray-1200')).join(', ')})`;
+export const onSolid = { blue: WHITE, grass: WHITE, orange: WHITE, tomato: WHITE, violet: WHITE, sky: DARK, amber: DARK };
 
 // Site sizes in CSS px. Body 14 px, secondary 12 px (text-xs), headings 16 px at weight 550-600, borders 1 px,
 // demo strokes 2 px, cards 12 px corners with a 1 px ring rgba(0,0,0,.08) (on gray-100 that is gray-400), chips 6 px.
@@ -107,7 +112,6 @@ const hex = (c) => {
   if (/^#[0-9a-f]{3}$/.test(s)) return '#' + [...s.slice(1)].map((h) => h + h).join('');
   return /^#[0-9a-f]{6}$/.test(s) ? s : null;
 };
-const rgb = (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16));
 const BY_HEX = new Map(Object.entries(TOKENS).map(([n, [l]]) => [l, n]));
 // nearest token for a colour that is not a token (library shades, white, black): the figure keeps to the palette
 function token(h) {
@@ -136,8 +140,9 @@ export function emilTheme(F, { animate = false } = {}) {
   if (animate) {
     // emil-design-eng: ease-out cubic-bezier(0.23, 1, 0.32, 1), never from scale(0), opacity with a small move,
     // a short stagger. Panels enter in reading order. No motion under prefers-reduced-motion.
+    // Motion that explains a process (for example a beam that moves along its path) can be longer: emil-design-eng permits it.
     css += `@media screen and (prefers-reduced-motion: no-preference) {
-  [data-panel] { animation: emil-in 400ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  [data-panel] { animation: emil-in 300ms cubic-bezier(0.23, 1, 0.32, 1) both; }
   @keyframes emil-in { from { opacity: 0; translate: 0 4px; } }
 }
 #host > svg [data-panel] { animation: none; }\n`;   // the upstream render page (#host): PNG and PDF keep the end state

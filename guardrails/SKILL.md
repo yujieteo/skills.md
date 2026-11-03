@@ -78,10 +78,10 @@ Reason: an allocation in a loop that runs each frame causes garbage collection p
 
 Applies when: the project ships a web page.
 
-1. List each page that a user can open first: each URL in the router, the sitemap or the build output (for example the home page, each article and each tool page).
-2. For each page, measure the gzipped size of each file that the first load of that page downloads. Count the shared files in the total of each page.
-3. Add a build step that fails when the total of a page is larger than the budget of that page. Use the budget of the owner for each page.
-4. When a page has no budget from the owner, use the current total of that page, rounded up to the next 10 KB. Report the budget of each page.
+1. List each route or page template (for example the home page, the article template and the tool template). Do not list each article.
+2. Add a build step that finds each page in the build output itself. The step gives each page the budget of its route or template. A page that the list does not name gets the default budget. The step never skips a page.
+3. For each page, the step measures the gzipped size of each file that the first load of that page downloads. Count the shared files in the total of each page. The step fails when the total of a page is larger than its budget.
+4. Use the budget of the owner for each route or template and for the default. When the owner gives no budget, use the largest current total of the pages of that route or template, rounded up to the next 10 KB. For the default, use the largest current total of all pages, rounded up in the same way. Report the budget of each route or template and of the default.
 
 Reason: a user can arrive on any page from a link, and the first download sets the load time on a slow network. Each change adds a few kilobytes, and no review sees the total.
 
@@ -131,6 +131,6 @@ Reason: the printed text shows the behavior in one place, as the fixture tests o
 
 - The part table of step 0.
 - For each step that applies: the rule, type, test or check, its path, and its first run output.
-- For step 6: the size and the budget of each page.
+- For step 6: the largest page size and the budget of each route or template and of the default.
 - For each step that does not apply: one line that names the missing part.
-- The open questions for the owner: the budget of each page, the target values, the excluded files of step 2, and the bugs that the new rules found.
+- The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, and the bugs that the new rules found.

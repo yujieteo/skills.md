@@ -91,7 +91,7 @@ function check(file: string | undefined): number {
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] ?? c);
 
 async function pageScript(): Promise<string> {
-  const built = await Bun.build({ entrypoints: [path.join(import.meta.dir, "../src/page.ts")], target: "browser", format: "esm" });
+  const built = await Bun.build({ entrypoints: [path.join(import.meta.dir, "../src/page.ts")], target: "browser", format: "esm", minify: { whitespace: true } });
   const first = built.outputs[0];
   if (!built.success || !first) throw new Error(`the page script did not build: ${built.logs.map(String).join("\n")}`);
   return first.text();

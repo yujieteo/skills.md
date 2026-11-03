@@ -35,8 +35,9 @@ To install for one project only, use `.claude/skills/` in that project.
 
 ## Invoke
 
-Each skill sets `disable-model-invocation: true`, so the agent does not start it automatically.
-Type its name and the target:
+`concept-ui`, `guardrails` and `state-machine` set `disable-model-invocation: true`, so the agent does not start them automatically.
+An agent can start `schematic-emil` when the user names it in a task.
+Type the skill name and the target:
 
 ```text
 /concept-ui the settings screen

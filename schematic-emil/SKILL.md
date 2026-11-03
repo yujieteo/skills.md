@@ -1,7 +1,6 @@
 ---
 name: schematic-emil
-description: Draw a scientific schematic figure or a patent drawing sheet in the look of Emil Kowalski (emilkowal.ski) for a blog post, a paper, a slide or a patent. It runs the upstream schematic-figure or patent-drawing skill with this style. For explicit use only, when the user invokes /schematic-emil.
-disable-model-invocation: true
+description: Draw a scientific schematic figure or a patent drawing sheet in the look of Emil Kowalski (emilkowal.ski) for a blog post, a paper, a slide or a patent. It runs the upstream schematic-figure or patent-drawing skill with this style. Use when the user asks for schematic-emil by name.
 ---
 
 # Schematic figure in the Emil Kowalski style

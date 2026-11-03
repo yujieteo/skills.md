@@ -1,9 +1,4 @@
-//! Target: femahoy `crates/fh/tests/chat_stale_line.rs`. Row `* | stale_line` of `chat.sm.md`.
-//! After Stop, no entry of the stopped agent shows. A fake agent prints a `result` event when it
-//! gets SIGTERM, as an agent can flush its last event. Today `Chat::follow` pushes each entry of
-//! each agent (`daemon/chat.rs:386`), so the page shows `end` after "stopped the agent" and hides
-//! the Rerun button (`daemon/page.html:819`). This file holds one test, because it sets
-//! environment variables.
+const TARGET: &str = "femahoy crates/fh/tests/chat_stale_line.rs, row `* | stale_line` of chat.sm.md: Chat::follow pushes each entry of each agent (daemon/chat.rs:386), so the page shows `end` after \"stopped the agent\" and hides the Rerun button (daemon/page.html:819)";
 mod common;
 use common::{p, scratch, script};
 
@@ -13,7 +8,7 @@ use std::time::{Duration, Instant};
 
 use fh::daemon::{Daemon, Options};
 
-const AGENT: &str = "#!/bin/sh\nIFS= read -r line\n\
+const AGENT_THAT_FLUSHES_A_RESULT_ON_TERM: &str = "#!/bin/sh\nIFS= read -r line\n\
     trap 'echo \"{\\\"type\\\":\\\"result\\\",\\\"subtype\\\":\\\"success\\\",\\\"is_error\\\":false}\"; exit 0' TERM\n\
     echo '{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"text\",\"text\":\"meshing\"}]}}'\n\
     touch \"READY\"\nwhile :; do sleep 0.05; done\n";
@@ -40,7 +35,7 @@ fn send(daemon: &Daemon, method: &str, path: &str, body: &str) -> String {
 fn no_entry_of_a_stopped_agent_shows() {
     let dir = scratch("chat-stale-line");
     let ready = dir.join("ready");
-    script(&dir.join("agent"), &AGENT.replace("READY", p(&ready)));
+    script(&dir.join("agent"), &AGENT_THAT_FLUSHES_A_RESULT_ON_TERM.replace("READY", p(&ready)));
     std::env::set_var("FH_AGENT", dir.join("agent"));
     let daemon = Daemon::start_with_options(&dir.join("state"), Options::default()).unwrap();
 
@@ -57,7 +52,7 @@ fn no_entry_of_a_stopped_agent_shows() {
         let after = chat.split("note stopped the agent").nth(1).unwrap_or("");
         assert!(
             !after.contains(" end "),
-            "an entry of the stopped agent shows:\n{chat}"
+            "{TARGET}: an entry of the stopped agent shows:\n{chat}"
         );
         std::thread::sleep(Duration::from_millis(100));
     }

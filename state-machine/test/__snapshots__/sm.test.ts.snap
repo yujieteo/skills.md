@@ -1,0 +1,17 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`a wildcard machine a star row applies to each state that has no own row 1`] = `
+"file: wild.sm.md
+machines[1]{name,states,events,rows,reqs,rows_per_req}:
+  door,3,3,4,2,2.0
+simplify[1]{kind,machine,at,line,detail}:
+  pass-through,door,busy,L17,"idle -> busy -> idle: delete busy"
+checks[2]{kind,machine,at,line,detail}:
+  unhandled,door,idle,-,"events: finish"
+  unhandled,door,busy,-,"events: start"
+help[3]:
+  Fix each check finding in wild.sm.md, or ask the owner to reject its row; then run \`sm-axi check wild.sm.md\` again
+  Write a simpler design as "## Proposal <machine>"; it shows only if it keeps each requirement, has fewer rows and passes the checks
+  Run \`sm-axi render wild.sm.md\` to write the review page
+"
+`;

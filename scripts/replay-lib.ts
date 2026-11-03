@@ -131,7 +131,7 @@ class FakeNode implements SvgNode {
     return this.attrs.get(name) ?? null;
   }
   setAttribute(name: string, value: string): void {
-    this.attrs.set(name, value);
+    this.attrs.set(name, String(value));
   }
   getBBox(): { y: number } {
     return { y: this.boxY };

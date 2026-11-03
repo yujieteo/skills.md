@@ -23,7 +23,7 @@ function runSm(root: string, input: SmInput): Json {
     if (input.command === "render" && existsSync(outFile)) {
       const html = readFileSync(outFile, "utf8");
       result.data = html.match(/^const DATA = (.*);$/m)?.[1] ?? null;
-      result.page = html.replace(REPLAY_PAGE_SCRIPT, "<script></script>");
+      result.page = html.replace(REPLAY_PAGE_SCRIPT, "");
     }
     return result;
   } finally {

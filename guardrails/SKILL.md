@@ -131,6 +131,6 @@ Reason: the printed text shows the behavior in one place, as the fixture tests o
 
 - The part table of step 0.
 - For each step that applies: the rule, type, test or check, its path, and its first run output.
-- For step 6: the largest page size and the budget of each route or template and of the default.
+- For step 6: for each route or template and for the default, the largest current page total and the budget.
 - For each step that does not apply: one line that names the missing part.
 - The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, and the bugs that the new rules found.

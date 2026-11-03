@@ -7,7 +7,7 @@ The first real run of the skill, on femahoy at `321483d6` (read only: no change 
 | [chat.sm.md](chat.sm.md) | The machines `chat` (the agent process in the daemon) and `job` (the page, from request to mesh, solve and report), the proposal, the requirements and the bug |
 | [check.toon](check.toon) | `sm-axi check chat.sm.md` |
 | [chat.html](chat.html) | `sm-axi render chat.sm.md`: the review page |
-| [tests/](tests/) | Failing tests. The first comment of each file names the femahoy path that it targets |
+| [tests/](tests/) | Failing tests. The `TARGET` constant of each file names the femahoy path that it targets and shows in the failure message |
 
 ## Results
 

@@ -23,9 +23,9 @@ If the request names no venue, infer it: a blog post is `web`, a paper is `journ
 ## Process
 
 1. Run the upstream `schematic-figure` skill with `style=schematic-emil`. For a patent sheet, run the upstream `patent-drawing` skill. Keep all upstream steps, options and defaults (also depth `full`).
-2. Copy `style.js` from this folder to `figure/emil.js`. Copy `fonts/` to `figure/fonts/`. Run the upstream tools with `--root <project>`.
+2. Build `style.ts` from this folder into `figure/emil.js` with `bun build <skill-folder>/style.ts --outfile figure/emil.js`. Copy `fonts/` to `figure/fonts/`. Run the upstream tools with `--root <project>`.
 3. In `figure/figure.js`, call `E.useEmil(F, L, venue)` first in `draw()`. It sets the font, the gray and colour tokens, the text sizes and the line weights for the venue. It returns `{s, r, line, text}`: the scale, the corner radii in pt, and the sizes.
-4. Draw with the tokens in `style.js`. Do not write a hex value that is not a token.
+4. Draw with the tokens in `style.ts`. Do not write a hex value that is not a token.
 5. Run the upstream gate, `node tools/check.mjs --root <project> --fig figure/figure.js`. A FAIL stops delivery.
 
 ## Style rules

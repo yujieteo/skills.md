@@ -1,0 +1,15 @@
+{
+  "name": "skills.md",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit && bun scripts/lint.ts && knip && bun test",
+    "replay": "bun scripts/replay.ts",
+    "capture": "bun scripts/capture.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.4",
+    "knip": "6.44.1",
+    "typescript": "5.9.3"
+  }
+}

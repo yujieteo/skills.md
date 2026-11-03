@@ -10,8 +10,8 @@ Make a state machine smaller before you make it correct.
 Do the steps in sequence. Never fix code before the owner approves the row on the board.
 The target is the code, the requirement, or both, that the user names. If the user names no target, ask for one.
 
-The CLI is `bin/sm-axi` in this skill folder (Node, no dependencies).
-Run it as `node <skill-folder>/bin/sm-axi`, or link it as `sm-axi` on the PATH.
+The CLI is `bin/sm-axi.ts` in this skill folder (Bun, no dependencies).
+Run it as `bun <skill-folder>/bin/sm-axi.ts`, or link it as `sm-axi` on the PATH.
 It prints compact TOON. The `help` lines of each output give the next command.
 
 ## Step 0: Write the machine file

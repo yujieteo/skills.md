@@ -1,0 +1,1468 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`useEmil and emilTheme venue web 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "r": {
+      "card": 6,
+      "chip": 3,
+    },
+    "s": 0.5,
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme venue journal 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "r": {
+      "card": 6,
+      "chip": 3,
+    },
+    "s": 0.5,
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme venue slide 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {
+      "bold": 2.5714285714285716,
+      "hair": 0.8,
+      "min": 0.8,
+      "normal": 1.9285714285714288,
+      "thin": 1.2857142857142858,
+    },
+    "r": {
+      "card": 15.42857142857143,
+      "chip": 7.714285714285715,
+    },
+    "s": 1.2857142857142858,
+    "text": {
+      "label": 18,
+      "max": 20.571428571428573,
+      "min": 15.42857142857143,
+      "panel": 20.571428571428573,
+      "small": 15.42857142857143,
+      "tick": 15.42857142857143,
+      "title": 20.571428571428573,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 2.5714285714285716,
+      "hair": 0.8,
+      "min": 0.8,
+      "normal": 1.9285714285714288,
+      "thin": 1.2857142857142858,
+    },
+    "text": {
+      "label": 18,
+      "max": 20.571428571428573,
+      "min": 15.42857142857143,
+      "panel": 20.571428571428573,
+      "small": 15.42857142857143,
+      "tick": 15.42857142857143,
+      "title": 20.571428571428573,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme venue poster 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {
+      "bold": 4,
+      "hair": 1.5,
+      "min": 1.5,
+      "normal": 3,
+      "thin": 2,
+    },
+    "r": {
+      "card": 24,
+      "chip": 12,
+    },
+    "s": 2,
+    "text": {
+      "label": 28,
+      "max": 32,
+      "min": 24,
+      "panel": 32,
+      "small": 24,
+      "tick": 24,
+      "title": 32,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 4,
+      "hair": 1.5,
+      "min": 1.5,
+      "normal": 3,
+      "thin": 2,
+    },
+    "text": {
+      "label": 28,
+      "max": 32,
+      "min": 24,
+      "panel": 32,
+      "small": 24,
+      "tick": 24,
+      "title": 32,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme venue patent 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Inter, sans-serif",
+        "y": "98.5",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#ffffff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {},
+    "r": {
+      "card": 0,
+      "chip": 0,
+    },
+    "s": 1,
+    "text": {},
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {},
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {},
+    "text": {},
+  },
+}
+`;
+
+exports[`useEmil and emilTheme venue patent-colour 1`] = `
+{
+  "drawing": {
+    "node": {
+      "attrs": {
+        "data-part": "sight",
+        "transform": "translate(96.000 96.000)",
+      },
+      "tag": "g",
+    },
+  },
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {
+      "bold": 0.7,
+      "hair": 0.3,
+      "normal": 0.5,
+      "thin": 0.4,
+    },
+    "r": {
+      "card": 12,
+      "chip": 6,
+    },
+    "s": 1,
+    "text": {
+      "label": 8,
+      "max": 10,
+      "min": 8,
+      "panel": 10,
+      "small": 8,
+      "tick": 8,
+      "title": 9,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 902.5511811130799,
+    "w": 662.55118111023,
+    "x": 96.00000000114,
+    "y": 96.00000000114,
+  },
+  "sightMM": {
+    "h": 238.79999999999998,
+    "w": 175.3,
+    "x": 25.4,
+    "y": 25.4,
+  },
+  "style": {
+    "arrow": {
+      "head": 2,
+      "width": 0.4,
+    },
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 0.7,
+      "hair": 0.3,
+      "normal": 0.5,
+      "thin": 0.4,
+    },
+    "text": {
+      "label": 8,
+      "max": 10,
+      "min": 8,
+      "panel": 10,
+      "small": 8,
+      "tick": 8,
+      "title": 9,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme web themed 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fill": "var(--color-gray-100, #fdfdfc)",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fill": "var(--color-gray-100, #fdfdfc)",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-blue-9, #0090ff)",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-gray-1200, #21201c)",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fill": "var(--color-gray-1200, #21201c)",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-tomato-9, #e54d2e)",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+        "stop-color": "var(--color-gray-900, #8d8d86)",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [
+    
+"@media (prefers-color-scheme: dark) { svg:root { --color-blue-9: #0090ff; --color-gray-100: #111110; --color-gray-1200: #eeeeec; --color-gray-900: #6f6d66; --color-tomato-9: #e54d2e; } }
+.dark svg { --color-blue-9: #0090ff; --color-gray-100: #111110; --color-gray-1200: #eeeeec; --color-gray-900: #6f6d66; --color-tomato-9: #e54d2e; }
+"
+,
+  ],
+  "look": {
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "r": {
+      "card": 6,
+      "chip": 3,
+    },
+    "s": 0.5,
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme web themed and animated 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Arial",
+        "y": "4",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#fdfdfc",
+      },
+      "style": {
+        "animationDelay": "",
+        "fill": "var(--color-gray-100, #fdfdfc)",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "0ms",
+        "fill": "var(--color-gray-100, #fdfdfc)",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-blue-9, #0090ff)",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-gray-1200, #21201c)",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "60ms",
+        "fill": "var(--color-gray-1200, #21201c)",
+        "fontFeatureSettings": "",
+        "stroke": "var(--color-tomato-9, #e54d2e)",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+        "stop-color": "var(--color-gray-900, #8d8d86)",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [
+    
+"@media (prefers-color-scheme: dark) { svg:root { --color-blue-9: #0090ff; --color-gray-100: #111110; --color-gray-1200: #eeeeec; --color-gray-900: #6f6d66; --color-tomato-9: #e54d2e; } }
+.dark svg { --color-blue-9: #0090ff; --color-gray-100: #111110; --color-gray-1200: #eeeeec; --color-gray-900: #6f6d66; --color-tomato-9: #e54d2e; }
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-panel] { animation: emil-in 300ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  @keyframes emil-in { from { opacity: 0; translate: 0 4px; } }
+}
+#host > svg [data-panel] { animation: none; }
+"
+,
+  ],
+  "look": {
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "r": {
+      "card": 6,
+      "chip": 3,
+    },
+    "s": 0.5,
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {
+      "beam": "#e54d2e",
+      "beamBlue": "#0090ff",
+      "beamGreen": "#46a758",
+      "beamIR": "#d13415",
+      "blue": "#0090ff",
+      "faint": "#e9e9e7",
+      "glass": "#e1f6fd",
+      "gold": "#ffc53d",
+      "green": "#46a758",
+      "ink": "#21201c",
+      "light": "#bcbbb5",
+      "metal": "#cfceca",
+      "mid": "#8d8d86",
+      "orange": "#f76b15",
+      "paper": "#fdfdfc",
+      "purple": "#6e56cf",
+      "silicon": "#8d8d86",
+      "sky": "#7ce2fe",
+      "substrate": "#e2e1de",
+      "text": "#21201c",
+      "tintBlue": "#e6f4fe",
+      "tintGreen": "#e9f6e9",
+      "tintGrey": "#f1f0ef",
+      "tintOrange": "#ffefd6",
+      "vermillion": "#e54d2e",
+      "yellow": "#ffc53d",
+    },
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {
+      "bold": 1,
+      "hair": 0.25,
+      "min": 0.25,
+      "normal": 0.75,
+      "thin": 0.5,
+    },
+    "text": {
+      "label": 7,
+      "max": 8,
+      "min": 6,
+      "panel": 8,
+      "small": 6,
+      "tick": 6,
+      "title": 8,
+    },
+  },
+}
+`;
+
+exports[`useEmil and emilTheme patent sheet number above the sight 1`] = `
+{
+  "drawing": null,
+  "elements": [
+    {
+      "attrs": {
+        "data-role": "sheet",
+        "font-family": "Inter, sans-serif",
+        "y": "90.5",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "text",
+    },
+    {
+      "attrs": {
+        "data-role": "background",
+        "fill": "#ffffff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#fff",
+        "stroke": "#0090ff",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "rect",
+    },
+    {
+      "attrs": {
+        "fill": "none",
+        "stroke": "black",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "path",
+    },
+    {
+      "attrs": {
+        "data-panel": "",
+        "fill": "#123456",
+        "stroke": "#e54d2e",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "circle",
+    },
+    {
+      "attrs": {
+        "stop-color": "#8d8d86",
+      },
+      "style": {
+        "animationDelay": "",
+        "fontFeatureSettings": "",
+      },
+      "tag": "stop",
+    },
+  ],
+  "inserted": [],
+  "look": {
+    "line": {},
+    "r": {
+      "card": 0,
+      "chip": 0,
+    },
+    "s": 1,
+    "text": {},
+  },
+  "root": {
+    "attrs": {},
+    "style": {
+      "animationDelay": "",
+      "fontFeatureSettings": ""cv01", "ss03"",
+    },
+    "tag": "svg",
+  },
+  "sight": {
+    "h": 800,
+    "w": 600,
+    "x": 90,
+    "y": 96,
+  },
+  "sightMM": null,
+  "style": {
+    "arrow": {},
+    "color": {},
+    "font": {
+      "family": "Inter, sans-serif",
+      "math": "Inter, sans-serif",
+    },
+    "line": {},
+    "text": {},
+  },
+}
+`;
+
+exports[`useEmil and emilTheme unknown venue 1`] = `
+{
+  "error": true,
+}
+`;
+
+exports[`patentFigure filing version 1`] = `
+{
+  "format": "patent",
+  "name": "fig1",
+  "sheet": "a4",
+}
+`;
+
+exports[`patentFigure colour version on letter 1`] = `
+{
+  "format": "slide",
+  "height": 279.4,
+  "name": "fig1-colour",
+  "width": 215.9,
+}
+`;
+
+exports[`patentFigure colour version on a4 1`] = `
+{
+  "format": "slide",
+  "height": 297,
+  "name": "fig-colour",
+  "width": 210,
+}
+`;
+
+exports[`patentFigure colour version of an unknown sheet 1`] = `
+{
+  "error": true,
+}
+`;

@@ -1,0 +1,5 @@
+{
+  "entry": ["state-machine/bin/sm-axi.ts", "state-machine/src/page.ts", "state-machine/test/*.test.ts", "schematic-emil/style.ts", "schematic-emil/test/*.test.ts", "scripts/*.ts"],
+  "project": ["state-machine/**/*.ts", "schematic-emil/**/*.ts", "scripts/**/*.ts"],
+  "ignoreExportsUsedInFile": false
+}

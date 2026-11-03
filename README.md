@@ -5,7 +5,7 @@ Agent skills for Claude Code that you invoke by name.
 ## Skills
 
 - [concept-ui](concept-ui/SKILL.md): UI redesign. Redesign an app or a screen from its conceptual model, then map the model to a layered, direct-manipulation, mobile-first interface.
-- [guardrails](guardrails/SKILL.md): project rules. Find the parts that a project has, then add the lint rule, test, build budget, state model or replay that stops the related fault, in the tools of that project.
+- [guardrails](guardrails/SKILL.md): project rules. Find the parts that a project has, then add the lint rule, type, test, page budget, state model, replay, property test, fuzz target, expect test, dead-code check, sanitizer build or verification rule that stops the related fault, in the tools of that project.
 - [schematic-emil](schematic-emil/SKILL.md): figures. Draw a scientific schematic or a patent drawing sheet in the look of [emilkowal.ski](https://emilkowal.ski), for the web, papers, slides and patents. It is a style for the [schematic-figure](https://github.com/lgwrightlab/schematic-figure) and patent-drawing skills by Jinchen Zhao and Logan Wright (LGW Lab, Yale University). Read their [blog post](https://lgwrightlab.github.io/schematic-figure/). Install those two skills from commit `09d8b6e`.
 - [state-machine](state-machine/SKILL.md): requirement and code review. Model code or a requirement as one state table, delete the rows and requirements that are not necessary, show a simpler design, prove each bug with a failing test, and review it on an HTML board. The CLI is `state-machine/bin/sm-axi` (Node, no dependencies). Example: [femahoy chat](state-machine/examples/femahoy-chat/).
 

@@ -10,7 +10,7 @@ Make the tools stop a fault, so that no person must remember a rule.
 The target is the project or the bug that the user names. If the user names no target, ask for one.
 Do the steps in sequence. Each step starts with "Applies when". If the project does not have that part, do not change the project for that step.
 Use the language, linter, test runner and build of the project. Add a new tool only when the project has none for that job.
-Before you keep a new check that runs (a lint rule, type, test, budget or model), break the code that it guards. See the check fail, then remove the break. A rule in the agent instructions has no break.
+Before you keep a new check that runs (for example a lint rule, a type, a test, a budget, a model, a dead-code build failure, a sanitizer build or a fuzz target), break the code that it guards. See the check fail, then remove the break. A rule in the agent instructions has no break.
 A raised budget or a new excluded file needs the approval of the owner and a reason in the change. Never disable a check: fix the code, or delete the check with the approval of the owner.
 
 ## Step 0: Find the parts
@@ -169,7 +169,7 @@ Reason: tests show that the parts work, but only a start of the app shows that a
 
 - The part table of step 0.
 - For each step that applies: the rule, type, test or check, its path and its first run output.
-- For each check that runs (a lint rule, type, test, budget or model): the break that it caught.
+- For each check that runs (for example a lint rule, a type, a test, a budget, a model, a dead-code build failure, a sanitizer build or a fuzz target): the break that it caught.
 - For step 6: for each route or template and for the default, the largest current page total and the budget.
 - For each step that does not apply: one line that names the missing part.
 - The open questions for the owner: the budget of each route or template and of the default, the target values, the excluded files of step 2, the bugs that the new rules found, and `/create-verification-skill` when step 13 found no verification skill.

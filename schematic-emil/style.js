@@ -56,7 +56,10 @@ export function useEmil(F, L, venue) {
   F.svg.style.fontFeatureSettings = FEATURES;
   if (venue === 'patent') {   // black and white: the upstream patent profile
     // Inter's "/" is taller than the Arial cap height that upstream uses to place the sheet number: keep it in the sight
-    const sh = F.svg.querySelector('text[data-role=sheet]'), b = sh?.getBBox();
+    // The engine draws the sheet number before draw() runs, so it still has the Arial family: set Inter first, then measure.
+    const sh = F.svg.querySelector('text[data-role=sheet]');
+    sh?.setAttribute('font-family', S.font.family);
+    const b = sh?.getBBox();
     if (b && b.y < F.sight.y) sh.setAttribute('y', +sh.getAttribute('y') + F.sight.y - b.y + 0.5);
     return { s: 1, r: { card: 0, chip: 0 }, line: S.line, text: S.text };
   }

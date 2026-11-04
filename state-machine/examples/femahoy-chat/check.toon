@@ -3,7 +3,7 @@ machines[2]{name,states,events,rows,reqs,rows_per_req}:
   chat,4,7,20,7,2.9
   job,5,7,18,7,2.6
 bugs[1]{id,proof}:
-  B1,tests/chat_stale_line.rs fails on 321483d6
+  B1,tests/chat_stale_line.rs fails on the commit above
 simplify[5]{kind,machine,at,line,detail}:
   global-event,chat,exit,L42,"3 rows (working broken resting) -> none: write one * row"
   merge-states,job,asked+meshed,-,same rows to the same states

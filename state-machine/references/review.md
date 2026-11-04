@@ -12,22 +12,22 @@
 
 - With lavish-axi: `lavish-axi <file>.html`. "Queue the review" queues one tracked batch with each decided id (`<machine>-L<line>` for a row, the id for a requirement). Then the owner sends it. Read it with `lavish-axi poll <file>.html`.
 - Without lavish-axi: open the file in a browser. "Copy the review" puts the decisions on the clipboard as text, one id on each line.
-- A rejected row is deleted with its requirement. A comment needs an answer in the next version.
+- Delete a rejected row with its requirement. A comment needs an answer in the next version.
 - After the changes, run `check` and `render` again, and reply on the board with `lavish-axi reply <file>.html --agent-reply "<what changed>"`.
 
 ## Look
 
-The tokens of the owner's site (`https://teoyujie.org/shared/kowalski.css`), light only, as the site: the gray scale, the Inter and IBM Plex Mono stacks, the strong ease-out curve, the `.button` look, 44 px tap areas, and hover only under `(hover: hover) and (pointer: fine)`.
+The page uses the tokens of the owner's site (`https://teoyujie.org/shared/kowalski.css`), light only. They are the gray scale, the Inter and IBM Plex Mono stacks, the strong ease-out curve and the `.button` look. Tap areas are 44 px. Hover works only under `(hover: hover) and (pointer: fine)`.
 
 ## Motion
 
 Names from animation-vocabulary. Each motion has a purpose.
 
-| Motion | Name | Values | Purpose |
-|---|---|---|---|
+| Motion                                              | Name                                           | Values                                                     | Purpose                                                          |
+| --------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | The current-state marker moves along the transition | Translate, a Tween along the edge path (WAAPI) | `transform` only, 200 ms, `cubic-bezier(0.23, 1, 0.32, 1)` | Spatial consistency: the reviewer sees which edge the event took |
-| A button press | Press / Tap feedback | `scale(0.97)`, 150 ms ease-out | Feedback |
-| A fired row, the current node | none (instant colour) | | A colour change at the arrival does not need motion |
+| A button press                                      | Press / Tap feedback                           | `scale(0.97)`, 150 ms ease-out                             | Feedback                                                         |
+| A fired row, the current node                       | none (instant colour)                          |                                                            | A colour change at the arrival does not need motion              |
 
 - A keyboard-fired event (`click` with `detail` 0) moves the marker at once: never animate a keyboard action.
 - Reduced motion: the marker moves at once, and the press scale is 1.
@@ -35,10 +35,10 @@ Names from animation-vocabulary. Each motion has a purpose.
 
 ## review-animations verdict of the template
 
-| Before | After | Why |
-|---|---|---|
-| Marker jumps to the next state | WAAPI `transform` along the edge, 200 ms strong ease-out | Spatial consistency; under 300 ms; ease-out answers the click at once |
-| Every fire animates | No movement for a keyboard fire or reduced motion | Keyboard actions get no animation; reduced motion is honoured |
-| Node colour fades | Instant colour at the arrival | No second motion that competes with the marker |
+| Before                         | After                                                    | Why                                                                   |
+| ------------------------------ | -------------------------------------------------------- | --------------------------------------------------------------------- |
+| Marker jumps to the next state | WAAPI `transform` along the edge, 200 ms strong ease-out | Spatial consistency. Under 300 ms. Ease-out answers the click at once |
+| Every fire animates            | No movement for a keyboard fire or reduced motion        | Keyboard actions get no animation. The page obeys reduced motion      |
+| Node colour fades              | Instant colour at the arrival                            | No second motion that competes with the marker                        |
 
 Approve: `transform` only, no `transition: all`, no `ease-in`, hover gated, reduced motion honoured.

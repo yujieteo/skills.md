@@ -1,13 +1,13 @@
 # skills.md
 
-Agent skills for Claude Code that you invoke by name.
+Agent skills for Claude Code that start when the user names them.
 
 ## Skills
 
-- [concept-ui](concept-ui/SKILL.md): UI redesign. Redesign an app or a screen from its conceptual model, then map the model to a layered, direct-manipulation, mobile-first interface.
-- [guardrails](guardrails/SKILL.md): project rules. Find the parts that a project has, then add the lint rule, type, test, page budget, state model, replay, property test, fuzz target, expect test, output replay, dead-code check, sanitizer build or verification rule that stops the related fault, in the tools of that project.
-- [schematic-emil](schematic-emil/SKILL.md): figures. Draw a scientific schematic or a patent drawing sheet in the look of [emilkowal.ski](https://emilkowal.ski), for the web, papers, slides and patents. It is a style for the [schematic-figure](https://github.com/lgwrightlab/schematic-figure) and patent-drawing skills by Jinchen Zhao and Logan Wright (LGW Lab, Yale University). Read their [blog post](https://lgwrightlab.github.io/schematic-figure/). Install those two skills from commit `09d8b6e`.
-- [state-machine](state-machine/SKILL.md): requirement and code review. Model code or a requirement as one state table, delete the rows and requirements that are not necessary, show a simpler design, prove each bug with a failing test, and review it on an HTML board. The CLI is `state-machine/bin/sm-axi.ts` (Bun, no dependencies). Example: [femahoy chat](state-machine/examples/femahoy-chat/).
+- [concept-ui](concept-ui/SKILL.md): redesign an app or a screen from its conceptual model.
+- [guardrails](guardrails/SKILL.md): add the checks that stop the faults of a project.
+- [schematic-emil](schematic-emil/SKILL.md): draw a schematic figure or a patent sheet in the look of [emilkowal.ski](https://emilkowal.ski).
+- [state-machine](state-machine/SKILL.md): review code or a requirement as a state table. The CLI is `state-machine/bin/sm-axi.ts` (Bun, no dependencies). Example: [femahoy chat](state-machine/examples/femahoy-chat/).
 
 ## Install for Claude Code
 
@@ -22,21 +22,23 @@ ln -s "$PWD/skills.md/state-machine" ~/.claude/skills/state-machine
 ln -s "$PWD/skills.md/state-machine/bin/sm-axi.ts" ~/.local/bin/sm-axi
 ```
 
-`schematic-emil` needs the upstream skills at the pinned commit:
+`schematic-emil` needs the upstream skills `schematic-figure` and `patent-drawing` by Jinchen Zhao and Logan Wright (LGW Lab, Yale University). Install them from the commit that [schematic-emil/SKILL.md](schematic-emil/SKILL.md) pins:
 
 ```sh
 git clone https://github.com/lgwrightlab/schematic-figure
-git -C schematic-figure checkout 09d8b6e98d04b91de6e8b6632b3356b9fc237417
+git -C schematic-figure checkout <pinned commit>
 ln -s "$PWD/schematic-figure/.claude/skills/schematic-figure" ~/.claude/skills/schematic-figure
 ln -s "$PWD/schematic-figure/.claude/skills/patent-drawing" ~/.claude/skills/patent-drawing
 ```
+
+The `animate` option of `schematic-emil` also needs the `emil-design-eng` skill from [emilkowalski/skills](https://github.com/emilkowalski/skills). Without it, the other options work.
 
 To install for one project only, use `.claude/skills/` in that project.
 
 ## Invoke
 
-`concept-ui`, `guardrails` and `state-machine` set `disable-model-invocation: true`, so the agent does not start them automatically.
-An agent can start `schematic-emil` when the user names it in a task.
+`concept-ui`, `guardrails` and `state-machine` set `disable-model-invocation: true`, so only the user starts them.
+The agent can also start `schematic-emil` when the user names it in a task.
 Type the skill name and the target:
 
 ```text
@@ -55,7 +57,7 @@ bun install
 bun run check
 ```
 
-`bun run check` runs `tsc --noEmit`, the lint of `scripts/lint.ts` (no comment without a link, no `any`, no type assertion, no non-null assertion, no `JSON.parse` result that is not `unknown`), `knip` (dead code) and `bun test`.
+`bun run check` runs `tsc --noEmit`, `scripts/lint.ts`, `knip` (dead code) and `bun test`.
 
 To update an expected output, run `bun test -u` and read the diff.
 
@@ -69,4 +71,5 @@ bun run replay
 bun run replay --accept
 ```
 
-`capture` runs the tests and keeps each input of a transform in `~/.cache/skills-md-replay`. `replay` runs each input on the merge base with `origin/main` and on `HEAD` (each in a copy of the commit), and fails on each difference. `--accept` accepts the differences on that run. `--base <commit>` changes the base. When more than 20% of the inputs differ, `replay` stops and reports a large change. Commit before you run `replay`. Do not add `replay` to CI.
+`capture` keeps the inputs of the tests in `~/.cache/skills-md-replay`. `replay` compares the outputs of the merge base with `origin/main` and of `HEAD`. `--accept` accepts the differences. `--base <commit>` changes the base.
+Commit before you run `replay`. The rules of this check are in step 11 of [guardrails](guardrails/SKILL.md).

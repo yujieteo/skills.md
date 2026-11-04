@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Make a state machine smaller before you make it correct.
 Do the steps in sequence. Never fix code before the owner approves the row on the board.
-The target is the code, the requirement, or both, that the user names. If the user names no target, ask for one.
+The target is the code, the requirement, or both, that the user names. If the user names no code or requirement, ask for one.
 
 The CLI is `bin/sm-axi.ts` in this skill folder (Bun, no dependencies).
 Run it as `bun <skill-folder>/bin/sm-axi.ts`, or link it as `sm-axi` on the PATH.
@@ -19,7 +19,7 @@ It prints compact TOON. The `help` lines of each output give the next command.
 Read [references/format.md](references/format.md) before you write the first file.
 
 1. Write `<name>.sm.md` next to the design documents of the project, or in a scratch folder when the project is read-only.
-2. Write the requirements first. Each requirement has an id, its text, and its source: a rule in a design document (`DESIGN.md:36`), an issue, or the exact words of the owner. Do not write a requirement that has no source.
+2. Write the requirements first. Each requirement has an id, its text, and its source. The source is a rule in a design document (`DESIGN.md:36`), an issue, or the exact words of the owner. Do not write a requirement that has no source.
 3. Write one row for each transition: `state | event | guard | next | req | source`.
    - From code: the source is `file:line` of the code that does the transition.
    - From a requirement only: the source is the requirement id.
@@ -30,7 +30,7 @@ Read [references/format.md](references/format.md) before you write the first fil
 
 Run `sm-axi check <file>`. Read the `row-no-req` and `req-no-row` findings.
 
-- A row with no requirement: the code does it, but nobody asked for it. Ask the owner on the board: approve it (then name the requirement and its source), or reject it (then it is deleted).
+- A row with no requirement: the code does it, but nobody asked for it. Ask the owner on the board. If the owner approves the row, name its requirement and source. If the owner rejects it, delete it.
 - A requirement with no row: nothing does it. Ask whether it is still necessary.
 - Do not invent a requirement to remove a finding. The finding is the question.
 - For each requirement, ask: did a real run show the need? A requirement added "in case" is a candidate to delete.
@@ -45,23 +45,23 @@ Run `sm-axi check` again.
 
 Read the `simplify` findings of `sm-axi check`:
 
-| Finding | Question for the design |
-|---|---|
-| `merge-states` | The states do the same thing. Can they be one state? |
+| Finding        | Question for the design                                                  |
+| -------------- | ------------------------------------------------------------------------ |
+| `merge-states` | The states do the same thing. Can they be one state?                     |
 | `pass-through` | One way in, one way out, no guard, no own requirement. Delete the state. |
-| `global-event` | Many states do the same on one event. Write one `*` row. |
-| `flag-guard` | One flag in many guards. Is it a hidden state, or a second machine? |
-| `flag-states` | The state names combine flags. Make one machine for each flag. |
-| `function` | No branch and no loop. A plain function is better than a machine. |
+| `global-event` | Many states do the same on one event. Write one `*` row.                 |
+| `flag-guard`   | One flag in many guards. Is it a hidden state, or a second machine?      |
+| `flag-states`  | The state names combine flags. Make one machine for each flag.           |
+| `function`     | No branch and no loop. A plain function is better than a machine.        |
 
 Also look at `rows_per_req`. A high ratio means that the machine is larger than its requirements.
 
 When a simpler design exists, write it as `## Proposal <machine>` in the same file.
-`sm-axi` shows a proposal only if it keeps each accepted requirement, has fewer rows and passes the 7 checks. Else `check` says why it is hidden. Do not argue for a hidden proposal.
+`sm-axi` shows a proposal only if it keeps each accepted requirement, has fewer rows and passes the checks of step 4. Else `check` says why it hides the proposal. Do not argue for a hidden proposal.
 
 ## Step 4: Kill bugs
 
-The 7 checks run on what remains:
+The checks run on what remains:
 
 1. `unreachable`: no path from the initial state.
 2. `dead-end`: no exit and not final.

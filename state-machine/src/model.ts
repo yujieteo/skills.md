@@ -126,7 +126,7 @@ export function parse(text: string, file: string): Doc {
         const isReq = sec.kind === "reqs";
         if (parts.length < 2)
           doc.errors.push(
-            `L${n}: ${isReq ? "requirement" : "bug"} ${group(m, 1)} has no ${isReq ? "source" : "proof"} (write "text — ${isReq ? "source" : "failing test"}")`,
+            `L${n}: ${isReq ? "requirement" : "bug"} ${group(m, 1)} has no ${isReq ? "source" : "proof"} (write "text -- ${isReq ? "source" : "failing test"}")`,
           );
         (isReq ? doc.reqs : doc.bugs).push({
           id: group(m, 1),

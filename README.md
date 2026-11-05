@@ -59,7 +59,7 @@ bun run check
 
 `bun run check` runs `tsc --noEmit`, `eslint` (typescript-eslint strict and stylistic, type-checked), `scripts/lint.ts`, the shared Power of 10 checker, `knip` (dead code) and `bun test`.
 
-The shared checker is `power10-check` (a private project), pinned by commit in the `power10` script of `package.json`. It runs through `uvx`, so it needs [uv](https://docs.astral.sh/uv/). It checks [Power of 10](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) rules 1, 2, 4, 5, 6, 8 and 9 in every `.ts` and `.goose` file, with `power10.toml` as its config. Rules 7 and 10 come from `tsc` and `eslint` at their strictest. There is no list of tolerated breaks: a break fails the check. To use a local copy of the checker, set `POWER10_CHECK_REPO` to its path or URL.
+The shared checker is `power10-check` 0.2.0, written in Goose. Its full commit is pinned in `power10.lock`, and `scripts/power10-check` (a copy of the checker's unchanged launcher) fetches that exact commit and builds it through C into a user cache; the `power10` script in `package.json` runs it. No Python is needed. The checker's source is in `github.com/yujieteo/power10-check`. It checks [Power of 10](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) rules 1, 2, 4, 5, 6, 8 and 9 in every `.ts` and `.goose` file, with `power10.toml` as its config, which pins the same version. Rules 7 and 10 come from `tsc` and `eslint` at their strictest. There is no list of tolerated breaks: a break fails the check. The launcher's source can be changed only by changing `power10.lock`, which must name a full commit and its version.
 
 To update an expected output, run `bun test -u` and read the diff.
 

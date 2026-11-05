@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "power10": "uvx --from \"git+${POWER10_CHECK_REPO:-https://github.com/yujieteo/power10-check}@5029251\" power10-check --require-version 0.1.0",
+    "power10": "scripts/power10-check",
     "check": "tsc --noEmit && eslint . && bun scripts/lint.ts && bun run power10 && knip && bun test",
     "replay": "bun scripts/replay.ts",
     "capture": "bun scripts/capture.ts"

@@ -348,13 +348,20 @@ function analyse(mc: Machine, reqIds: Set<string>): Analysis {
   const branchless = [...edges.values()].every((e) => e.length <= 1);
   let cyclic = false;
   const mark = new Map<string, number>();
-  const dfs = (s: string): void => {
-    mark.set(s, 1);
-    for (const t of edges.get(s) ?? []) {
-      if (mark.get(t) === 1) cyclic = true;
-      else if (!mark.get(t)) dfs(t);
+  const dfs = (start: string): void => {
+    const stack: { s: string; rest: string[] }[] = [{ s: start, rest: [...(edges.get(start) ?? [])] }];
+    mark.set(start, 1);
+    for (let top = stack.at(-1); top !== undefined; top = stack.at(-1)) {
+      const t = top.rest.shift();
+      if (t === undefined) {
+        mark.set(top.s, 2);
+        stack.pop();
+      } else if (mark.get(t) === 1) cyclic = true;
+      else if (!mark.get(t)) {
+        mark.set(t, 1);
+        stack.push({ s: t, rest: [...(edges.get(t) ?? [])] });
+      }
     }
-    mark.set(s, 2);
   };
   for (const s of states) if (!mark.get(s)) dfs(s);
   if (states.length <= 2 || (branchless && !cyclic)) find(simplify, "function", mc.name, 0, "no branch and no loop: is a plain function better?");

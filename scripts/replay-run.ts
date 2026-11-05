@@ -38,13 +38,13 @@ async function loadStyle(root: string): Promise<StyleApi> {
     if (typeof found !== "function") throw new Error(`style module has no function ${name}`);
     return (...args) => Reflect.apply(found, undefined, args);
   };
-  const useEmil = fn("useEmil");
-  const emilTheme = fn("emilTheme");
-  const patentFigure = fn("patentFigure");
+  const useEmilFn = fn("useEmil");
+  const emilThemeFn = fn("emilTheme");
+  const patentFigureFn = fn("patentFigure");
   return {
-    useEmil: (F, L, venue) => useEmil(F, L, venue),
-    emilTheme: (F, options) => emilTheme(F, options),
-    patentFigure: (base, colour) => patentFigure(base, colour),
+    useEmil: (F, L, venue) => useEmilFn(F, L, venue),
+    emilTheme: (F, options) => emilThemeFn(F, options),
+    patentFigure: (base, colour) => patentFigureFn(base, colour),
   };
 }
 

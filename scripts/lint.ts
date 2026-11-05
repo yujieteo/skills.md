@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
+import { checkJpl } from "./jpl.ts";
 
 const EXCLUDED_FILES = ["state-machine/examples/femahoy-chat/chat.html"];
 const SOURCE_EXTENSIONS = [".ts", ".rs", ".html"];
@@ -15,11 +16,14 @@ function commentFinding(file: string, text: string, offset: number, comment: str
   return [{ file, line: lineOf(text, offset) + base, message: `comment without a link to an outside source: ${comment.split("\n")[0]?.slice(0, 60) ?? ""}` }];
 }
 
-function leafTokens(node: ts.Node, sf: ts.SourceFile, out: ts.Node[]): void {
-  if (node.kind >= ts.SyntaxKind.FirstJSDocNode && node.kind <= ts.SyntaxKind.LastJSDocNode) return;
-  const children = node.getChildren(sf);
-  if (!children.length) out.push(node);
-  for (const c of children) leafTokens(c, sf, out);
+function leafTokens(root: ts.Node, sf: ts.SourceFile, out: ts.Node[]): void {
+  const stack = [root];
+  for (let node = stack.pop(); node !== undefined; node = stack.pop()) {
+    if (node.kind >= ts.SyntaxKind.FirstJSDocNode && node.kind <= ts.SyntaxKind.LastJSDocNode) continue;
+    const children = node.getChildren(sf);
+    if (!children.length) out.push(node);
+    stack.push(...children.toReversed());
+  }
 }
 
 function lintTypeScript(file: string, text: string, base = 0): Finding[] {
@@ -173,6 +177,9 @@ if (import.meta.main) {
   const all: Finding[] = [];
   for (const file of listFiles()) all.push(...(await lintFile(file, readFileSync(path.join(root, file), "utf8"))));
   for (const f of all) console.log(`${f.file}:${f.line}: ${f.message}`);
-  console.log(`lint: ${all.length} finding(s)`);
-  process.exit(all.length ? 1 : 0);
+  const jpl = checkJpl(root);
+  for (const p of jpl) console.log(p);
+  const total = all.length + jpl.length;
+  console.log(`lint: ${total} finding(s)`);
+  process.exit(total ? 1 : 0);
 }

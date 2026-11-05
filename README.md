@@ -59,6 +59,8 @@ bun run check
 
 `bun run check` runs `tsc --noEmit`, `scripts/lint.ts`, `knip` (dead code) and `bun test`.
 
+`scripts/lint.ts` also checks [JPL rules 1 and 4](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) in every `.goose` and `.ts` file: no function calls itself, directly or through another, and no function is over 60 lines. `JPL_LONG_FUNCTIONS` in `scripts/jpl.ts` lists the existing long functions with their current line counts. The list only shrinks: lower a limit when a function gets shorter, remove it at 60.
+
 To update an expected output, run `bun test -u` and read the diff.
 
 ## Process replay

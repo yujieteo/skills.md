@@ -123,7 +123,7 @@ class FakeNode implements SvgNode {
     return this.attrs.get(name) ?? null;
   }
   setAttribute(name: string, value: string): void {
-    this.attrs.set(name, String(value));
+    this.attrs.set(name, value);
   }
   getBBox(): { y: number } {
     return { y: this.boxY };
@@ -138,7 +138,7 @@ class FakeNode implements SvgNode {
     this.inserted.push(node);
   }
   matches(selector: string): boolean {
-    const m = selector.match(/^(\w+)?\[([\w-]+)(?:=([\w-]+))?\]$/);
+    const m = /^(\w+)?\[([\w-]+)(?:=([\w-]+))?\]$/.exec(selector);
     if (!m) return false;
     const [, tag, attr, value] = m;
     if (tag && tag !== this.tag) return false;
@@ -165,11 +165,14 @@ export function installDomStubs(): void {
       return Promise.resolve(this);
     }
   }
-  Reflect.set(globalThis, "FontFace", FontFaceStub);
-  Reflect.set(globalThis, "document", {
-    fonts: { add: (): void => undefined },
-    createElementNS: (): { textContent: string | null } => ({ textContent: null }),
-  });
+  const stubs = {
+    FontFace: FontFaceStub,
+    document: {
+      fonts: { add: (): void => undefined },
+      createElementNS: (): { textContent: string | null } => ({ textContent: null }),
+    },
+  };
+  for (const [name, value] of Object.entries(stubs)) Object.defineProperty(globalThis, name, { value, configurable: true, writable: true });
 }
 
 const fakeLibrary = (): Library => ({

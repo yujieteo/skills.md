@@ -1,3 +1,5 @@
+import { assert } from "./assert.ts";
+
 // Values copied from the CSS that https://emilkowal.ski serves (2026-11-03) and from Radix Colors 3.0.0 https://www.radix-ui.com/colors
 export const TOKENS = {
   "gray-100": ["#fdfdfc", "#111110"], "gray-200": ["#f9f9f8", "#191918"], "gray-300": ["#f1f0ef", "#222221"],
@@ -16,13 +18,31 @@ export const TOKENS = {
 export type TokenName = keyof typeof TOKENS;
 type Rgb = readonly [number, number, number];
 
-const isTokenName = (n: string): n is TokenName => Object.hasOwn(TOKENS, n);
+function isTokenName(n: string): n is TokenName {
+  assert(typeof n === "string", "a token name is text");
+  assert(n.length > 0, "a token name is not empty");
+  return Object.hasOwn(TOKENS, n);
+}
 const TOKEN_NAMES: TokenName[] = Object.keys(TOKENS).filter(isTokenName);
 
-export const light = (n: TokenName): string => TOKENS[n][0];
-export const dark = (n: TokenName): string => TOKENS[n][1];
+export function light(n: TokenName): string {
+  assert(isTokenName(n), "light needs a known token");
+  assert(TOKENS[n][0].startsWith("#"), "token values are hex colours");
+  return TOKENS[n][0];
+}
 
-const rgb = (h: string): Rgb => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+export function dark(n: TokenName): string {
+  assert(isTokenName(n), "dark needs a known token");
+  assert(TOKENS[n][1].startsWith("#"), "token values are hex colours");
+  return TOKENS[n][1];
+}
+
+function rgb(h: string): Rgb {
+  assert(/^#[0-9a-f]{6}$/.test(h), "rgb needs a six digit hex colour");
+  const out: Rgb = [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  assert(out.every((v) => v >= 0 && v <= 255), "channels are bytes");
+  return out;
+}
 
 export const gray = {
   100: light("gray-100"), 200: light("gray-200"), 300: light("gray-300"), 400: light("gray-400"),
@@ -31,9 +51,11 @@ export const gray = {
 };
 
 type HueName = "blue" | "sky" | "grass" | "amber" | "orange" | "tomato" | "violet";
-const steps = (h: HueName): { 3: string; 7: string; 9: string; 11: string } => ({
-  3: light(`${h}-3`), 7: light(`${h}-7`), 9: light(`${h}-9`), 11: light(`${h}-11`),
-});
+function steps(h: HueName): { 3: string; 7: string; 9: string; 11: string } {
+  assert(typeof h === "string", "a hue is named");
+  assert(isTokenName(`${h}-3`), "each hue has a step 3");
+  return { 3: light(`${h}-3`), 7: light(`${h}-7`), 9: light(`${h}-9`), 11: light(`${h}-11`) };
+}
 export const hue = {
   blue: steps("blue"), sky: steps("sky"), grass: steps("grass"), amber: steps("amber"),
   orange: steps("orange"), tomato: steps("tomato"), violet: steps("violet"),
@@ -46,17 +68,34 @@ export const onSolid = { blue: WHITE, grass: WHITE, orange: WHITE, tomato: WHITE
 export const PX = { label: 14, small: 12, title: 16, hair: 0.5, thin: 1, normal: 1.5, bold: 2, card: 12, chip: 6, pad: 16, gap: 24 };
 export const weight = { name: 500, text: 400, title: 600 };
 
-export const hex = (c: string): string | null => {
+export function hex(c: string): string | null {
+  assert(typeof c === "string", "a colour is text");
   const s = c.trim().toLowerCase();
+  assert(s.length < 1000, "a colour is short");
   if (s === "white") return "#ffffff";
   if (s === "black") return "#000000";
-  if (/^#[0-9a-f]{3}$/.test(s)) return "#" + [...s.slice(1)].map((h) => h + h).join("");
-  return /^#[0-9a-f]{6}$/.test(s) ? s : null;
-};
+  if (/^#[0-9a-f]{3}$/.test(s)) return "#" + Array.from(s.slice(1), (h) => h + h).join("");
+  const found = /^#[0-9a-f]{6}$/.test(s) ? s : null;
+  assert(found === null || found.length === 7, "a result is seven characters");
+  return found;
+}
 
 const BY_HEX = new Map<string, TokenName>(TOKEN_NAMES.map((n) => [light(n), n]));
 
+assert(new Set(TOKEN_NAMES.map((n) => light(n))).size === TOKEN_NAMES.length, "token light colours are unique");
+assert(TOKEN_NAMES.length === Object.keys(TOKENS).length, "every token name is known");
+assert(TOKEN_NAMES.every((n) => /^#[0-9a-f]{6}$/.test(dark(n))), "each token has a dark hex colour");
+assert(Object.keys(gray).length === 12, "gray has twelve steps");
+assert(Object.keys(hue).length === 7, "there are seven hues");
+assert(Object.keys(onSolid).length === 7, "each hue has a text colour");
+assert(WHITE !== DARK, "white and dark text differ");
+assert(Object.keys(TOKENS).length % 4 === 0, "tokens come in whole hues");
+assert(typeof TOKENS["gray-100"][0] === "string", "tokens are pairs of text");
+assert(PX.card > PX.chip, "cards are rounder than chips");
+assert(weight.title > weight.text, "titles are heavier than text");
+
 export function token(h: string): TokenName {
+  assert(/^#[0-9a-f]{6}$/.test(h), "token needs a six digit hex colour");
   const known = BY_HEX.get(h);
   if (known) return known;
   const a = rgb(h);
@@ -70,20 +109,28 @@ export function token(h: string): TokenName {
       best = n;
     }
   }
+  assert(isTokenName(best), "the nearest token is known");
   return best;
 }
 
-export const card = (r: number): { fill: string; stroke: string; r: number } => ({ fill: gray[100], stroke: gray[400], r });
+export function card(r: number): { fill: string; stroke: string; r: number } {
+  assert(Number.isFinite(r), "a radius is a number");
+  assert(r >= 0, "a radius is not negative");
+  return { fill: gray[100], stroke: gray[400], r };
+}
 
 export type FigureExport = Record<string, unknown>;
 
 const SHEETS = new Map<string, readonly [number, number]>([["letter", [215.9, 279.4]], ["a4", [210, 297]]]);
 
 export function patentFigure(base: FigureExport, colour: boolean): FigureExport {
+  assert(typeof base === "object", "the figure export is an object");
+  assert(typeof colour === "boolean", "colour is a flag");
   if (!colour) return { ...base, format: "patent" };
   const sheetName = base.sheet ?? "letter";
   const size = typeof sheetName === "string" ? SHEETS.get(sheetName) : undefined;
-  if (!size) throw new Error(`patentFigure: unknown sheet "${String(sheetName)}"`);
+  if (!size) throw new Error(`patentFigure: unknown sheet "${JSON.stringify(sheetName)}"`);
   const rest = Object.fromEntries(Object.entries(base).filter(([k]) => k !== "sheet" && k !== "sheetId" && k !== "numerals"));
-  return { ...rest, format: "slide", width: size[0], height: size[1], name: `${String(base.name ?? "fig")}-colour` };
+  assert(size[0] > 0 && size[1] > 0, "a sheet has a size");
+  return { ...rest, format: "slide", width: size[0], height: size[1], name: `${typeof base.name === "string" ? base.name : "fig"}-colour` };
 }

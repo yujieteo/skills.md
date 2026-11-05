@@ -3,13 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "tsc --noEmit && bun scripts/lint.ts && knip && bun test",
+    "power10": "uvx --from \"git+${POWER10_CHECK_REPO:-https://github.com/yujieteo/power10-check}@5029251\" power10-check --require-version 0.1.0",
+    "check": "tsc --noEmit && eslint . && bun scripts/lint.ts && bun run power10 && knip && bun test",
     "replay": "bun scripts/replay.ts",
     "capture": "bun scripts/capture.ts"
   },
   "devDependencies": {
     "@types/bun": "1.4.4",
+    "eslint": "9.39.5",
     "knip": "6.44.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1"
   }
 }

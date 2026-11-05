@@ -37,36 +37,45 @@ const scenarios: StyleInput[] = [
   scenario("unknown venue", "billboard"),
 ];
 
-describe("useEmil and emilTheme", () => {
-  for (const input of scenarios) {
-    test(input.name, () => {
-      capture(input);
-      expect(evaluateStyle(api, input)).toMatchSnapshot();
-    });
-  }
-});
-
-describe("patentFigure", () => {
-  const cases: [string, Record<string, string>, boolean][] = [
-    ["filing version", { sheet: "a4", name: "fig1" }, false],
-    ["colour version on letter", { name: "fig1", sheetId: "1", numerals: "yes", sheet: "letter" }, true],
-    ["colour version on a4", { sheet: "a4" }, true],
-    ["colour version of an unknown sheet", { sheet: "tabloid" }, true],
-  ];
-  for (const [name, base, colour] of cases) {
-    test(name, () => {
-      const input = { tool: "patent-figure" as const, name, base, colour };
-      capture(input);
-      expect(evaluatePatent(api, input)).toMatchSnapshot();
-    });
-  }
-});
-
-describe("colour parsing", () => {
-  test("hex expands a short colour and names", () => {
-    expect([hex("#fff"), hex("white"), hex("BLACK"), hex("#12345"), hex("rgb(0,0,0)")]).toEqual(["#ffffff", "#ffffff", "#000000", null, null]);
+function styleSuite(): void {
+  describe("useEmil and emilTheme", () => {
+    for (const input of scenarios) {
+      test(input.name, () => {
+        capture(input);
+        expect(evaluateStyle(api, input)).toMatchSnapshot();
+      });
+    }
   });
-  test("a colour that is not a token maps to the nearest token", () => {
-    expect([token("#0090ff"), token("#ffffff"), token("#000000")]).toEqual(["blue-9", "gray-100", "gray-1200"]);
+}
+styleSuite();
+
+function patentSuite(): void {
+  describe("patentFigure", () => {
+    const cases: [string, Record<string, string>, boolean][] = [
+      ["filing version", { sheet: "a4", name: "fig1" }, false],
+      ["colour version on letter", { name: "fig1", sheetId: "1", numerals: "yes", sheet: "letter" }, true],
+      ["colour version on a4", { sheet: "a4" }, true],
+      ["colour version of an unknown sheet", { sheet: "tabloid" }, true],
+    ];
+    for (const [name, base, colour] of cases) {
+      test(name, () => {
+        const input = { tool: "patent-figure" as const, name, base, colour };
+        capture(input);
+        expect(evaluatePatent(api, input)).toMatchSnapshot();
+      });
+    }
   });
-});
+}
+patentSuite();
+
+function colourSuite(): void {
+  describe("colour parsing", () => {
+    test("hex expands a short colour and names", () => {
+      expect([hex("#fff"), hex("white"), hex("BLACK"), hex("#12345"), hex("rgb(0,0,0)")]).toEqual(["#ffffff", "#ffffff", "#000000", null, null]);
+    });
+    test("a colour that is not a token maps to the nearest token", () => {
+      expect([token("#0090ff"), token("#ffffff"), token("#000000")]).toEqual(["blue-9", "gray-100", "gray-1200"]);
+    });
+  });
+}
+colourSuite();

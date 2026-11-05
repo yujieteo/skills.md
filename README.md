@@ -57,9 +57,9 @@ bun install
 bun run check
 ```
 
-`bun run check` runs `tsc --noEmit`, `scripts/lint.ts`, `knip` (dead code) and `bun test`.
+`bun run check` runs `tsc --noEmit`, `eslint` (typescript-eslint strict and stylistic, type-checked), `scripts/lint.ts`, the shared Power of 10 checker, `knip` (dead code) and `bun test`.
 
-`scripts/lint.ts` also checks [JPL rules 1 and 4](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) in every `.goose` and `.ts` file: no function calls itself, directly or through another, and no function is over 60 lines. `JPL_LONG_FUNCTIONS` in `scripts/jpl.ts` lists the existing long functions with their current line counts. The list only shrinks: lower a limit when a function gets shorter, remove it at 60.
+The shared checker is `power10-check` (a private project), pinned by commit in the `power10` script of `package.json`. It runs through `uvx`, so it needs [uv](https://docs.astral.sh/uv/). It checks [Power of 10](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) rules 1, 2, 4, 5, 6, 8 and 9 in every `.ts` and `.goose` file, with `power10.toml` as its config. Rules 7 and 10 come from `tsc` and `eslint` at their strictest. There is no list of tolerated breaks: a break fails the check. To use a local copy of the checker, set `POWER10_CHECK_REPO` to its path or URL.
 
 To update an expected output, run `bun test -u` and read the diff.
 

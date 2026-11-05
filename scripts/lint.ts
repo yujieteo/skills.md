@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { checkJpl } from "./jpl.ts";
 
 const EXCLUDED_FILES = ["state-machine/examples/femahoy-chat/chat.html"];
 const SOURCE_EXTENSIONS = [".ts", ".rs", ".html"];
@@ -144,13 +143,13 @@ function lintRust(file: string, text: string): Finding[] {
       findings.push(...commentFinding(file, text, i, text.slice(i, j)));
       i = j;
     } else if (c === "r" || c === "b") {
-      const raw = text.slice(i).match(/^b?r(#*)"/);
+      const raw = /^b?r(#*)"/.exec(text.slice(i));
       if (raw) i = skipString(i + raw[0].length, (raw[1] ?? "").length);
       else if (c === "b" && text[i + 1] === '"') i = skipString(i + 2, 0);
       else i++;
     } else if (c === '"') i = skipString(i + 1, 0);
     else if (c === "'") {
-      const literal = text.slice(i).match(/^'(?:\\.[^']*|[^\\'])'/);
+      const literal = /^'(?:\\.[^']*|[^\\'])'/.exec(text.slice(i));
       i += literal ? literal[0].length : 1;
     } else i++;
   }
@@ -177,9 +176,7 @@ if (import.meta.main) {
   const all: Finding[] = [];
   for (const file of listFiles()) all.push(...(await lintFile(file, readFileSync(path.join(root, file), "utf8"))));
   for (const f of all) console.log(`${f.file}:${f.line}: ${f.message}`);
-  const jpl = checkJpl(root);
-  for (const p of jpl) console.log(p);
-  const total = all.length + jpl.length;
+  const total = all.length;
   console.log(`lint: ${total} finding(s)`);
   process.exit(total ? 1 : 0);
 }

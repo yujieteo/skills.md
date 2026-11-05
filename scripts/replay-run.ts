@@ -16,11 +16,11 @@ function runSm(root: string, input: SmInput): Json {
     const args = input.command === "render" ? [input.command, file, "--out", "out.html"] : [input.command, file];
     const [cmd, ...entry] = smEntry(root);
     const done = Bun.spawnSync([cmd ?? "", ...entry, ...args], { cwd: dir, stdout: "pipe", stderr: "pipe" });
-    const result: { [key: string]: Json } = { exit: done.exitCode, stdout: done.stdout.toString(), stderr: done.stderr.toString() };
+    const result: Record<string, Json> = { exit: done.exitCode, stdout: done.stdout.toString(), stderr: done.stderr.toString() };
     const outFile = path.join(dir, "out.html");
     if (input.command === "render" && existsSync(outFile)) {
       const html = readFileSync(outFile, "utf8");
-      result.data = html.match(/^const DATA = (.*);$/m)?.[1] ?? null;
+      result.data = /^const DATA = (.*);$/m.exec(html)?.[1] ?? null;
       result.page = html;
     }
     return result;
@@ -34,9 +34,12 @@ async function loadStyle(root: string): Promise<StyleApi> {
   const ts = path.join(root, "schematic-emil", "style.ts");
   const mod: unknown = await import(existsSync(ts) ? ts : path.join(root, "schematic-emil", "style.js"));
   const fn = (name: string): ((...args: unknown[]) => unknown) => {
-    const found: unknown = typeof mod === "object" && mod !== null ? Reflect.get(mod, name) : undefined;
+    const found: unknown = typeof mod === "object" && mod !== null ? Object.entries(mod).find(([key]) => key === name)?.[1] : undefined;
     if (typeof found !== "function") throw new Error(`style module has no function ${name}`);
-    return (...args) => Reflect.apply(found, undefined, args);
+    return (...args) => {
+      const called: unknown = found.call(undefined, ...args);
+      return called;
+    };
   };
   const useEmilFn = fn("useEmil");
   const emilThemeFn = fn("emilTheme");

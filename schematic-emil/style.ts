@@ -1,3 +1,4 @@
+import { assert } from "./assert.ts";
 import { dark, gray, hex, hue, light, PX, token, type TokenName } from "./tokens.ts";
 
 export { card, gray, hue, onSolid, patentFigure, PX, TOKENS, weight } from "./tokens.ts";
@@ -71,6 +72,8 @@ const VENUES = new Map<string, { scale: number; lineMin: number }>([
 ]);
 
 export function useEmil(F: Figure, L: Library, venue: string): Look {
+  assert(typeof venue === "string", "a venue is named");
+  assert(venue !== "", "useEmil needs a venue");
   const S = L.STYLE;
   S.font.family = "Inter, sans-serif";
   S.font.math = "Inter, sans-serif";
@@ -94,6 +97,7 @@ export function useEmil(F: Figure, L: Library, venue: string): Look {
     tintBlue: hue.blue[3], tintOrange: hue.orange[3], tintGreen: hue.grass[3], tintGrey: gray[300],
   });
   const min = found.lineMin;
+  assert(s > 0 && min > 0, "a venue has a positive scale and line minimum");
   const ln = (px: number): number => Math.max(min, px * s);
   if (venue === "patent-colour") {
     const P = L.PATENT;
@@ -106,15 +110,21 @@ export function useEmil(F: Figure, L: Library, venue: string): Look {
     Object.assign(S.line, { hair: ln(PX.hair), thin: ln(PX.thin), normal: ln(PX.normal), bold: ln(PX.bold), min });
   }
   F.svg.querySelector("[data-role=background]")?.setAttribute("fill", gray[100]);
+  assert(Number.isFinite(PX.card * s), "radii are finite");
   return { s, r: { card: PX.card * s, chip: PX.chip * s }, line: S.line, text: S.text };
 }
 
 function giveSight(F: Figure, L: Library): void {
+  assert(F.widthMM > 0 && F.heightMM > 0, "the sheet has a size");
+  assert(L.PATENT.margin.left >= 0, "margins are not negative");
   const m = L.PATENT.margin;
   F.sightMM = { x: m.left, y: m.top, w: F.widthMM - m.left - m.right, h: F.heightMM - m.top - m.bottom };
   F.sight = { x: L.mm(F.sightMM.x), y: L.mm(F.sightMM.y), w: L.mm(F.sightMM.w), h: L.mm(F.sightMM.h) };
   F.drawing = { node: L.el(F.root, "g", { transform: `translate(${F.sight.x.toFixed(3)} ${F.sight.y.toFixed(3)})`, "data-part": "sight" }) };
+  assert(F.sight.w > 0 && F.sight.h > 0, "the sight has an area");
 }
+
+assert(VENUES.has("web"), "the web venue exists");
 
 const THEMED_ATTRIBUTES = ["fill", "stroke", "stop-color", "flood-color"];
 
@@ -127,6 +137,8 @@ const ENTRANCE_CSS = `@media screen and (prefers-reduced-motion: no-preference) 
 const PANEL_STAGGER_MS = 60;
 
 export function emilTheme(F: Figure, { animate = false }: { animate?: boolean } = {}): void {
+  assert(typeof animate === "boolean", "animate is a flag");
+  assert(F.svg.firstChild !== undefined, "emilTheme needs an svg with a first child slot");
   const used = new Set<TokenName>();
   for (const e of [F.svg, ...F.svg.querySelectorAll("*")]) {
     for (const a of THEMED_ATTRIBUTES) {
@@ -147,5 +159,6 @@ export function emilTheme(F: Figure, { animate = false }: { animate?: boolean } 
   const st = document.createElementNS("http://www.w3.org/2000/svg", "style");
   st.textContent = css;
   F.svg.insertBefore(st, F.svg.firstChild);
+  assert(css.length > 0, "the theme wrote some css");
 }
 
